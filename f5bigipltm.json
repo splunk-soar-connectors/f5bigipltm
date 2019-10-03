@@ -57,7 +57,7 @@
             "identifier": "create_node",
             "description": "Create a new node",
             "verbose": "Create a new node",
-            "type": "correct",
+            "type": "generic",
             "read_only": false,
             "parameters": {
                 "node_name": {
@@ -327,7 +327,7 @@
             "identifier": "delete_node",
             "description": "Delete a node",
             "verbose": "Delete a node",
-            "type": "correct",
+            "type": "generic",
             "read_only": false,
             "parameters": {
                 "node_name": {
@@ -404,7 +404,7 @@
             "identifier": "remove_node",
             "description": "Remove a node from a pool",
             "verbose": "Remove a node from a pool",
-            "type": "correct",
+            "type": "generic",
             "read_only": false,
             "parameters": {
                 "node_name": {
@@ -519,7 +519,7 @@
             "identifier": "create_pool",
             "description": "Create a new pool",
             "verbose": "Create a new pool",
-            "type": "corect",
+            "type": "generic",
             "read_only": false,
             "parameters": {
                 "pool_name": {
@@ -838,7 +838,7 @@
             "identifier": "add_node",
             "description": "Add a node to a pool",
             "verbose": "Add a node to a pool",
-            "type": "correct",
+            "type": "generic",
             "read_only": false,
             "parameters": {
                 "node_name": {
@@ -1140,7 +1140,7 @@
             "identifier": "disable_node",
             "description": "Disable a node",
             "verbose": "Disable a node",
-            "type": "correct",
+            "type": "generic",
             "read_only": false,
             "parameters": {
                 "node_name": {

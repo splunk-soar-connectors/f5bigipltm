@@ -1,3 +1,6 @@
 .git*
 *.py
 .idea*
+docker-compose.yml
+.gitlab-ci.yml
+Makefile
