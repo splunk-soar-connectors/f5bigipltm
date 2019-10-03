@@ -101,7 +101,7 @@
                 {
                     "data_path": "action_result.parameter.node_name",
                     "data_type": "string",
-                    "column_name": "node_name",
+                    "column_name": "node name",
                     "column_order": 0,
                     "example_values": [
                         "test7"
@@ -363,7 +363,7 @@
                 {
                     "data_path": "action_result.parameter.node_name",
                     "data_type": "string",
-                    "column_name": "node_name",
+                    "column_name": "node name",
                     "column_order": 0,
                     "example_values": [
                         "test8"
@@ -451,7 +451,7 @@
                     "contains": [
                         "node name"
                     ],
-                    "column_name": "node_name",
+                    "column_name": "node name",
                     "column_order": 0,
                     "example_values": [
                         "test8"
@@ -892,7 +892,7 @@
                 {
                     "data_path": "action_result.parameter.node_name",
                     "data_type": "string",
-                    "column_name": "node_name",
+                    "column_name": "node name",
                     "column_order": 0,
                     "example_values": [
                         "test8"
@@ -1383,7 +1383,7 @@
                 {
                     "data_path": "action_result.parameter.node_name",
                     "data_type": "string",
-                    "column_name": "node_name",
+                    "column_name": "node name",
                     "column_order": 0,
                     "example_values": [
                         "nginx1",
@@ -1612,7 +1612,7 @@
                 {
                     "data_path": "action_result.parameter.node_name",
                     "data_type": "string",
-                    "column_name": "node_name",
+                    "column_name": "node name",
                     "column_order": 0,
                     "example_values": [
                         "nginx1",
@@ -2635,7 +2635,9 @@
                     ],
                     "contains": [
                         "node name"
-                    ]
+                    ],
+                    "column_name": "member name",
+                    "column_order": 0
                 },
                 {
                     "data_path": "action_result.data.*.generation",
@@ -2670,7 +2672,9 @@
                     "data_type": "string",
                     "example_values": [
                         "up"
-                    ]
+                    ],
+                    "column_name": "state",
+                    "column_order": 2
                 },
                 {
                     "data_path": "action_result.data.*.session",
@@ -2708,7 +2712,9 @@
                     ],
                     "contains": [
                         "ip"
-                    ]
+                    ],
+                    "column_name": "address",
+                    "column_order": 1
                 },
                 {
                     "data_path": "action_result.data.*.dynamicRatio",
