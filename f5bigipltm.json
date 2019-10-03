@@ -2574,6 +2574,244 @@
                 "type": "table"
             },
             "versions": "EQ(*)"
+        },
+        {
+            "action": "list members",
+            "identifier": "list_members",
+            "description": "List all configured node members of a pool",
+            "verbose": "List all configured node members of a pool",
+            "type": "generic",
+            "read_only": true,
+            "parameters": {
+                "pool_name": {
+                    "description": "Name of the pool",
+                    "data_type": "string",
+                    "required": true,
+                    "primary": false,
+                    "contains": [
+                        "pool name"
+                    ],
+                    "value_list": [],
+                    "default": "",
+                    "order": 0
+                },
+                "partition_name": {
+                    "description": "Name of the partition",
+                    "data_type": "string",
+                    "required": true,
+                    "primary": false,
+                    "value_list": [],
+                    "default": "",
+                    "order": 1
+                }
+            },
+            "output": [
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "example_values": [
+                        "success"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.kind",
+                    "data_type": "string",
+                    "example_values": [
+                        "tm:ltm:pool:members:membersstate"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.ratio",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.name",
+                    "data_type": "string",
+                    "example_values": [
+                        "nginx1:80"
+                    ],
+                    "contains": [
+                        "node name"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.generation",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.partition",
+                    "data_type": "string",
+                    "example_values": [
+                        "Common"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.ephemeral",
+                    "data_type": "string",
+                    "example_values": [
+                        "false"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.fqdn.autopopulate",
+                    "data_type": "string",
+                    "example_values": [
+                        "disabled"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.state",
+                    "data_type": "string",
+                    "example_values": [
+                        "up"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.session",
+                    "data_type": "string",
+                    "example_values": [
+                        "monitor-enabled"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.priorityGroup",
+                    "data_type": "numeric",
+                    "example_values": [
+                        0
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.logging",
+                    "data_type": "string",
+                    "example_values": [
+                        "disabled"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.connectionLimit",
+                    "data_type": "numeric",
+                    "example_values": [
+                        0
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.address",
+                    "data_type": "string",
+                    "example_values": [
+                        "10.1.17.76"
+                    ],
+                    "contains": [
+                        "ip"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.dynamicRatio",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.fullPath",
+                    "data_type": "string",
+                    "example_values": [
+                        "/Common/nginx1:80"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.inheritProfile",
+                    "data_type": "string",
+                    "example_values": [
+                        "enabled"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.rateLimit",
+                    "data_type": "string",
+                    "example_values": [
+                        "disabled"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.selfLink",
+                    "data_type": "string",
+                    "example_values": [
+                        "https://localhost/mgmt/tm/ltm/pool/~Common~pool1/members/~Common~nginx1:80?ver=15.0.0"
+                    ],
+                    "contains": [
+                        "url"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.monitor",
+                    "data_type": "string",
+                    "example_values": [
+                        "default"
+                    ]
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string",
+                    "example_values": [
+                        "Successfully listed pool members"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.pool_name",
+                    "data_type": "string",
+                    "example_values": [
+                        "pool1"
+                    ],
+                    "contains": [
+                        "pool name"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.partition_name",
+                    "data_type": "string",
+                    "example_values": [
+                        "Common"
+                    ]
+                },
+                {
+                    "data_path": "action_result.summary.num_members",
+                    "data_type": "numeric",
+                    "example_values": [
+                        4
+                    ]
+                },
+                {
+                    "data_path": "action_result.summary.members",
+                    "data_type": "string",
+                    "example_values": [
+                        "nginx1:80,nginx2:80,nginx3:80,test10:80"
+                    ]
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                }
+            ],
+            "render": {
+                "type": "table"
+            },
+            "versions": "EQ(*)"
         }
     ]
 }

@@ -398,6 +398,34 @@ class F5BigipLtmConnector(BaseConnector):
 
         return action_result.set_status(phantom.APP_SUCCESS, "Successfully created pool")
 
+    def _handle_list_members(self, param):
+
+        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
+
+        action_result = self.add_action_result(ActionResult(dict(param)))
+
+        pool_name = param['pool_name']
+        partition_name = param['partition_name']
+
+        # make rest call
+        ret_val, response = self._make_rest_call('/mgmt/tm/ltm/pool/~{0}~{1}/members'.format(partition_name, pool_name), action_result)
+
+        if (phantom.is_fail(ret_val)):
+            return action_result.get_status()
+
+        members = []
+
+        for item in response['items']:
+            action_result.add_data(item)
+            if 'name' in item:
+                members.append(item['name'])
+
+        summary = action_result.update_summary({})
+        summary['num_members'] = len(action_result.get_data())
+        summary['members'] = ','.join(members)
+
+        return action_result.set_status(phantom.APP_SUCCESS, "Successfully listed pool members")
+
     def handle_action(self, param):
 
         ret_val = phantom.APP_SUCCESS
@@ -439,6 +467,9 @@ class F5BigipLtmConnector(BaseConnector):
 
         elif action_id == 'list_pools':
             ret_val = self._handle_list_pools(param)
+
+        elif action_id == 'list_members':
+            ret_val = self._handle_list_members(param)
 
         return ret_val
 
