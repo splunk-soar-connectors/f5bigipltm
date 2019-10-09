@@ -41,7 +41,6 @@
             "action": "test connectivity",
             "identifier": "test_connectivity",
             "description": "Validate the asset configuration for connectivity using supplied configuration",
-            "verbose": "",
             "type": "test",
             "read_only": true,
             "parameters": {},
@@ -52,7 +51,6 @@
             "action": "create node",
             "identifier": "create_node",
             "description": "Create a new node",
-            "verbose": "Create a new node",
             "type": "generic",
             "read_only": false,
             "parameters": {
@@ -316,7 +314,6 @@
             "action": "delete node",
             "identifier": "delete_node",
             "description": "Delete a node",
-            "verbose": "Delete a node",
             "type": "generic",
             "read_only": false,
             "parameters": {
@@ -391,7 +388,6 @@
             "action": "remove node",
             "identifier": "remove_node",
             "description": "Remove a node from a pool",
-            "verbose": "Remove a node from a pool",
             "type": "generic",
             "read_only": false,
             "parameters": {
@@ -500,7 +496,6 @@
             "action": "create pool",
             "identifier": "create_pool",
             "description": "Create a new pool",
-            "verbose": "Create a new pool",
             "type": "generic",
             "read_only": false,
             "parameters": {
@@ -813,7 +808,6 @@
             "action": "add node",
             "identifier": "add_node",
             "description": "Add a node to a pool",
-            "verbose": "Add a node to a pool",
             "type": "generic",
             "read_only": false,
             "parameters": {
@@ -1107,7 +1101,6 @@
             "action": "disable node",
             "identifier": "disable_node",
             "description": "Disable a node",
-            "verbose": "Disable a node",
             "type": "generic",
             "read_only": false,
             "parameters": {
@@ -1328,7 +1321,6 @@
             "action": "enable node",
             "identifier": "enable_node",
             "description": "Enable a node",
-            "verbose": "Enable a node",
             "type": "generic",
             "read_only": false,
             "parameters": {
@@ -1557,7 +1549,6 @@
             "action": "describe node",
             "identifier": "describe_node",
             "description": "Get information about a node",
-            "verbose": "Get information about a node",
             "type": "generic",
             "read_only": true,
             "parameters": {
@@ -1774,7 +1765,6 @@
             "action": "list nodes",
             "identifier": "list_nodes",
             "description": "List all nodes",
-            "verbose": "List all nodes",
             "type": "generic",
             "read_only": true,
             "parameters": {},
@@ -1982,7 +1972,6 @@
             "action": "list pools",
             "identifier": "list_pools",
             "description": "List all configured pools",
-            "verbose": "List all configured pools",
             "type": "generic",
             "read_only": true,
             "parameters": {},
@@ -2541,7 +2530,6 @@
             "action": "list members",
             "identifier": "list_members",
             "description": "List all configured node members of a pool",
-            "verbose": "List all configured node members of a pool",
             "type": "generic",
             "read_only": true,
             "parameters": {
