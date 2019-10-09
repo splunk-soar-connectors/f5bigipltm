@@ -182,7 +182,7 @@ class F5BigipLtmConnector(BaseConnector):
         summary['port'] = port
         summary['pool_name'] = pool_name
 
-        return action_result.set_status(phantom.APP_SUCCESS, "Node successfully removed from pool".format(pool_name))
+        return action_result.set_status(phantom.APP_SUCCESS, "Node successfully removed from pool")
 
     def _handle_add_node(self, param):
 
