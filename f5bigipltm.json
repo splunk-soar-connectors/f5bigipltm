@@ -18,7 +18,7 @@
     "app_wizard_version": "1.0.0",
     "configuration": {
         "base_url": {
-            "description": "base url",
+            "description": "Base URL of F5 BIG-IP LTM instance",
             "data_type": "string",
             "required": true,
             "value_list": [],
