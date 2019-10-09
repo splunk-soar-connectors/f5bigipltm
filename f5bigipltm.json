@@ -21,16 +21,12 @@
             "description": "Base URL of F5 BIG-IP LTM instance",
             "data_type": "string",
             "required": true,
-            "value_list": [],
-            "default": "",
             "order": 0
         },
         "username": {
             "description": "User name",
             "data_type": "string",
             "required": true,
-            "value_list": [],
-            "default": "",
             "order": 1
         },
         "password": {
@@ -68,8 +64,6 @@
                     "contains": [
                         "node name"
                     ],
-                    "value_list": [],
-                    "default": "",
                     "order": 0
                 },
                 "partition_name": {
@@ -80,8 +74,6 @@
                     "contains": [
                         "partition name"
                     ],
-                    "value_list": [],
-                    "default": "",
                     "order": 1
                 },
                 "ip_address": {
@@ -92,8 +84,6 @@
                     "contains": [
                         "ip"
                     ],
-                    "value_list": [],
-                    "default": "",
                     "order": 2
                 }
             },
@@ -338,8 +328,6 @@
                     "contains": [
                         "node name"
                     ],
-                    "value_list": [],
-                    "default": "",
                     "order": 0
                 }
             },
@@ -415,8 +403,6 @@
                     "contains": [
                         "node name"
                     ],
-                    "value_list": [],
-                    "default": "",
                     "order": 0
                 },
                 "port": {
@@ -427,8 +413,6 @@
                     "contains": [
                         "port"
                     ],
-                    "value_list": [],
-                    "default": "",
                     "order": 1
                 },
                 "pool_name": {
@@ -439,8 +423,6 @@
                     "contains": [
                         "pool name"
                     ],
-                    "value_list": [],
-                    "default": "",
                     "order": 2
                 }
             },
@@ -530,8 +512,6 @@
                     "contains": [
                         "pool name"
                     ],
-                    "value_list": [],
-                    "default": "",
                     "order": 0
                 },
                 "pool_description": {
@@ -539,8 +519,6 @@
                     "data_type": "string",
                     "required": false,
                     "contains": [],
-                    "value_list": [],
-                    "default": "",
                     "order": 1
                 },
                 "partition_name": {
@@ -549,8 +527,6 @@
                     "required": true,
                     "primary": false,
                     "contains": [],
-                    "value_list": [],
-                    "default": "",
                     "order": 2
                 }
             },
@@ -849,8 +825,6 @@
                     "contains": [
                         "node name"
                     ],
-                    "value_list": [],
-                    "default": "",
                     "order": 0
                 },
                 "partition_name": {
@@ -859,8 +833,6 @@
                     "required": true,
                     "primary": false,
                     "contains": [],
-                    "value_list": [],
-                    "default": "",
                     "order": 1
                 },
                 "port": {
@@ -871,8 +843,6 @@
                     "contains": [
                         "port"
                     ],
-                    "value_list": [],
-                    "default": "",
                     "order": 2
                 },
                 "pool_name": {
@@ -883,8 +853,6 @@
                     "contains": [
                         "pool name"
                     ],
-                    "value_list": [],
-                    "default": "",
                     "order": 3
                 }
             },
@@ -1151,8 +1119,6 @@
                     "contains": [
                         "node name"
                     ],
-                    "value_list": [],
-                    "default": "",
                     "order": 0
                 }
             },
@@ -1374,8 +1340,6 @@
                     "contains": [
                         "node name"
                     ],
-                    "value_list": [],
-                    "default": "",
                     "order": 0
                 }
             },
@@ -1603,8 +1567,6 @@
                     "required": true,
                     "primary": false,
                     "contains": [],
-                    "value_list": [],
-                    "default": "",
                     "order": 0
                 }
             },
@@ -2591,8 +2553,6 @@
                     "contains": [
                         "pool name"
                     ],
-                    "value_list": [],
-                    "default": "",
                     "order": 0
                 },
                 "partition_name": {
@@ -2600,8 +2560,6 @@
                     "data_type": "string",
                     "required": true,
                     "primary": false,
-                    "value_list": [],
-                    "default": "",
                     "order": 1
                 }
             },
