@@ -58,7 +58,7 @@
                     "description": "Name of the node to create",
                     "data_type": "string",
                     "required": true,
-                    "primary": false,
+                    "primary": true,
                     "contains": [
                         "node name"
                     ],
@@ -68,7 +68,7 @@
                     "description": "Name of the partition",
                     "data_type": "string",
                     "required": true,
-                    "primary": false,
+                    "primary": true,
                     "contains": [
                         "partition name"
                     ],
@@ -78,7 +78,7 @@
                     "description": "IP address of the new node",
                     "data_type": "string",
                     "required": true,
-                    "primary": false,
+                    "primary": true,
                     "contains": [
                         "ip"
                     ],
@@ -321,7 +321,7 @@
                     "description": "Name of the node to delete",
                     "data_type": "string",
                     "required": true,
-                    "primary": false,
+                    "primary": true,
                     "contains": [
                         "node name"
                     ],
@@ -395,7 +395,7 @@
                     "description": "Name of the node to remove",
                     "data_type": "string",
                     "required": true,
-                    "primary": false,
+                    "primary": true,
                     "contains": [
                         "node name"
                     ],
@@ -405,7 +405,7 @@
                     "description": "Port number",
                     "data_type": "string",
                     "required": true,
-                    "primary": false,
+                    "primary": true,
                     "contains": [
                         "port"
                     ],
@@ -415,7 +415,7 @@
                     "description": "Name of pool to remove the node from",
                     "data_type": "string",
                     "required": true,
-                    "primary": false,
+                    "primary": true,
                     "contains": [
                         "pool name"
                     ],
@@ -503,7 +503,7 @@
                     "description": "Name of pool to create",
                     "data_type": "string",
                     "required": true,
-                    "primary": false,
+                    "primary": true,
                     "contains": [
                         "pool name"
                     ],
@@ -815,7 +815,7 @@
                     "description": "Name of the node to add",
                     "data_type": "string",
                     "required": true,
-                    "primary": false,
+                    "primary": true,
                     "contains": [
                         "node name"
                     ],
@@ -833,7 +833,7 @@
                     "description": "Port number",
                     "data_type": "string",
                     "required": true,
-                    "primary": false,
+                    "primary": true,
                     "contains": [
                         "port"
                     ],
@@ -843,7 +843,7 @@
                     "description": "Name of the pool to add node member",
                     "data_type": "string",
                     "required": true,
-                    "primary": false,
+                    "primary": true,
                     "contains": [
                         "pool name"
                     ],
@@ -1108,7 +1108,7 @@
                     "description": "Name of the node to disable",
                     "data_type": "string",
                     "required": true,
-                    "primary": false,
+                    "primary": true,
                     "contains": [
                         "node name"
                     ],
@@ -1328,7 +1328,7 @@
                     "description": "Name of the node to enable",
                     "data_type": "string",
                     "required": true,
-                    "primary": false,
+                    "primary": true,
                     "contains": [
                         "node name"
                     ],
@@ -2537,7 +2537,7 @@
                     "description": "Name of the pool",
                     "data_type": "string",
                     "required": true,
-                    "primary": false,
+                    "primary": true,
                     "contains": [
                         "pool name"
                     ],
