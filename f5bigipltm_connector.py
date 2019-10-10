@@ -11,7 +11,6 @@ from phantom.base_connector import BaseConnector
 from phantom.action_result import ActionResult
 
 # Usage of the consts file is recommended
-# from f5bigipltm_consts import *
 import requests
 import json
 from bs4 import BeautifulSoup
@@ -76,9 +75,16 @@ class F5BigipLtmConnector(BaseConnector):
         if 200 <= r.status_code < 399:
             return RetVal(phantom.APP_SUCCESS, resp_json)
 
-        # You should process the error returned in the json
-        message = "Error from server. Status Code: {0} Data from server: {1}".format(
-                r.status_code, r.text.replace(u'{', '{{').replace(u'}', '}}'))
+        try:
+            if resp_json and (resp_json.get("code") or resp_json.get("message")):
+                message = "Error occurred while making the request. Status Code: {0}. Response Code: {1}. Message from server: {2}".format(
+                                                                                                                    r.status_code, resp_json.get("code"), resp_json.get("message"))
+            else:
+                # You should process the error returned in the json
+                message = "Error from server. Status Code: {0} Data from server: {1}".format(
+                        r.status_code, r.text.encode('utf-8').replace(u'{', '{{').replace(u'}', '}}'))
+        except Exception as e:
+            message = "Unknown error occurred while processing the output response from the server. Status Code: {0}. Data from server: {1}".format(r.status_code, str(e))
 
         return RetVal(action_result.set_status(phantom.APP_ERROR, message), None)
 
@@ -128,7 +134,10 @@ class F5BigipLtmConnector(BaseConnector):
             return RetVal(action_result.set_status(phantom.APP_ERROR, "Invalid method: {0}".format(method)), resp_json)
 
         # Create a URL to connect to
-        url = self._base_url + endpoint
+        try:
+            url = self._base_url + endpoint
+        except Exception as e:
+            return RetVal(action_result.set_status(phantom.APP_ERROR, "Please check the asset configuration and action parameters. Error: {0}".format(str(e))), None)
 
         try:
             r = request_func(
@@ -152,7 +161,7 @@ class F5BigipLtmConnector(BaseConnector):
         ret_val, response = self._make_rest_call('/mgmt/tm/ltm', action_result, params=None, headers=None)
 
         if (phantom.is_fail(ret_val)):
-            self.save_progress("Test Connectivity Failed.")
+            self.save_progress("Test Connectivity Failed")
             return action_result.get_status()
 
         # Return success

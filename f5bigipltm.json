@@ -18,7 +18,7 @@
     "app_wizard_version": "1.0.0",
     "configuration": {
         "base_url": {
-            "description": "Base URL of F5 BIG-IP LTM instance",
+            "description": "Base URL of F5 BIG-IP LTM instance (e.g. https://10.1.16.110)",
             "data_type": "string",
             "required": true,
             "order": 0
@@ -40,7 +40,7 @@
         {
             "action": "test connectivity",
             "identifier": "test_connectivity",
-            "description": "Validate the asset configuration for connectivity using supplied configuration",
+            "description": "Validate the asset configuration for connectivity using the supplied configuration",
             "type": "test",
             "read_only": true,
             "parameters": {},
@@ -70,7 +70,7 @@
                     "required": true,
                     "primary": true,
                     "contains": [
-                        "partition name"
+                        "f5 partition name"
                     ],
                     "order": 1
                 },
@@ -87,23 +87,201 @@
             },
             "output": [
                 {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "column_name": "Status",
+                    "column_order": 1,
+                    "example_values": [
+                        "success",
+                        "failed"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.ip_address",
+                    "data_type": "string",
+                    "example_values": [
+                        "1.1.1.1"
+                    ],
+                    "contains": [
+                        "ip"
+                    ]
+                },
+                {
                     "data_path": "action_result.parameter.node_name",
                     "data_type": "string",
-                    "column_name": "node name",
+                    "column_name": "Node Name",
                     "column_order": 0,
                     "example_values": [
-                        "test7"
+                        "test"
                     ],
                     "contains": [
                         "f5 node name"
                     ]
                 },
                 {
-                    "data_path": "action_result.status",
+                    "data_path": "action_result.parameter.partition_name",
                     "data_type": "string",
-                    "column_name": "status",
                     "example_values": [
-                        "success"
+                        "Common"
+                    ],
+                    "contains": [
+                        "f5 partition name"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.address",
+                    "data_type": "string",
+                    "example_values": [
+                        "1.1.1.1"
+                    ],
+                    "contains": [
+                        "ip"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.connectionLimit",
+                    "data_type": "numeric",
+                    "example_values": [
+                        0
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.dynamicRatio",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.ephemeral",
+                    "data_type": "string",
+                    "example_values": [
+                        "false"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.fqdn.addressFamily",
+                    "data_type": "string",
+                    "example_values": [
+                        "ipv4"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.fqdn.autopopulate",
+                    "data_type": "string",
+                    "example_values": [
+                        "disabled"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.fqdn.downInterval",
+                    "data_type": "numeric",
+                    "example_values": [
+                        5
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.fqdn.interval",
+                    "data_type": "string",
+                    "example_values": [
+                        "3600"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.fullPath",
+                    "data_type": "string",
+                    "example_values": [
+                        "/Common/test8"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.generation",
+                    "data_type": "numeric",
+                    "example_values": [
+                        138
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.kind",
+                    "data_type": "string",
+                    "example_values": [
+                        "tm:ltm:node:nodestate"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.logging",
+                    "data_type": "string",
+                    "example_values": [
+                        "disabled"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.monitor",
+                    "data_type": "string",
+                    "example_values": [
+                        "default"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.name",
+                    "data_type": "string",
+                    "example_values": [
+                        "test"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.partition",
+                    "data_type": "string",
+                    "example_values": [
+                        "Common"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.rateLimit",
+                    "data_type": "string",
+                    "example_values": [
+                        "disabled"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.ratio",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.selfLink",
+                    "data_type": "string",
+                    "example_values": [
+                        "https://localhost/mgmt/tm/ltm/node/~Common~test8?ver=15.0.0"
+                    ],
+                    "contains": [
+                        "url"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.session",
+                    "data_type": "string",
+                    "example_values": [
+                        "user-enabled"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.state",
+                    "data_type": "string",
+                    "example_values": [
+                        "unchecked"
+                    ]
+                },
+                {
+                    "data_path": "action_result.summary.node_name",
+                    "data_type": "string",
+                    "example_values": [
+                        "test8"
+                    ],
+                    "contains": [
+                        "f5 node name"
                     ]
                 },
                 {
@@ -125,182 +303,6 @@
                     "data_type": "numeric",
                     "example_values": [
                         1
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.kind",
-                    "data_type": "string",
-                    "example_values": [
-                        "tm:ltm:node:nodestate"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.ratio",
-                    "data_type": "numeric",
-                    "example_values": [
-                        1
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.name",
-                    "data_type": "string",
-                    "example_values": [
-                        "test8"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.generation",
-                    "data_type": "numeric",
-                    "example_values": [
-                        138
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.partition",
-                    "data_type": "string",
-                    "example_values": [
-                        "Common"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.ephemeral",
-                    "data_type": "string",
-                    "example_values": [
-                        "false"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.fqdn.autopopulate",
-                    "data_type": "string",
-                    "example_values": [
-                        "disabled"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.fqdn.downInterval",
-                    "data_type": "numeric",
-                    "example_values": [
-                        5
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.fqdn.addressFamily",
-                    "data_type": "string",
-                    "example_values": [
-                        "ipv4"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.fqdn.interval",
-                    "data_type": "string",
-                    "example_values": [
-                        "3600"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.state",
-                    "data_type": "string",
-                    "example_values": [
-                        "unchecked"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.session",
-                    "data_type": "string",
-                    "example_values": [
-                        "user-enabled"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.dynamicRatio",
-                    "data_type": "numeric",
-                    "example_values": [
-                        1
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.connectionLimit",
-                    "data_type": "numeric",
-                    "example_values": [
-                        0
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.address",
-                    "data_type": "string",
-                    "example_values": [
-                        "1.1.1.1"
-                    ],
-                    "contains": [
-                        "ip"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.logging",
-                    "data_type": "string",
-                    "example_values": [
-                        "disabled"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.fullPath",
-                    "data_type": "string",
-                    "example_values": [
-                        "/Common/test8"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.rateLimit",
-                    "data_type": "string",
-                    "example_values": [
-                        "disabled"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.selfLink",
-                    "data_type": "string",
-                    "example_values": [
-                        "https://localhost/mgmt/tm/ltm/node/~Common~test8?ver=15.0.0"
-                    ],
-                    "contains": [
-                        "url"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.monitor",
-                    "data_type": "string",
-                    "example_values": [
-                        "default"
-                    ]
-                },
-                {
-                    "data_path": "action_result.parameter.ip_address",
-                    "data_type": "string",
-                    "example_values": [
-                        "1.1.1.1"
-                    ],
-                    "contains": [
-                        "ip"
-                    ]
-                },
-                {
-                    "data_path": "action_result.parameter.partition_name",
-                    "data_type": "string",
-                    "example_values": [
-                        "Common"
-                    ],
-                    "contains": [
-                        "partition name"
-                    ]
-                },
-                {
-                    "data_path": "action_result.summary.node_name",
-                    "data_type": "string",
-                    "example_values": [
-                        "test8"
-                    ],
-                    "contains": [
-                        "f5 node name"
                     ]
                 }
             ],
@@ -331,9 +333,34 @@
                 {
                     "data_path": "action_result.status",
                     "data_type": "string",
-                    "column_name": "status",
+                    "column_name": "Status",
+                    "column_order": 1,
                     "example_values": [
-                        "success"
+                        "success",
+                        "failed"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.node_name",
+                    "data_type": "string",
+                    "column_name": "Node Name",
+                    "column_order": 0,
+                    "example_values": [
+                        "test8"
+                    ],
+                    "contains": [
+                        "f5 node name"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.summary.node_name",
+                    "data_type": "string",
+                    "example_values": [
+                        "test8"
                     ]
                 },
                 {
@@ -341,18 +368,6 @@
                     "data_type": "string",
                     "example_values": [
                         "Successfully deleted node"
-                    ]
-                },
-                {
-                    "data_path": "action_result.parameter.node_name",
-                    "data_type": "string",
-                    "column_name": "node name",
-                    "column_order": 0,
-                    "example_values": [
-                        "test8"
-                    ],
-                    "contains": [
-                        "f5 node name"
                     ]
                 },
                 {
@@ -367,13 +382,6 @@
                     "data_type": "numeric",
                     "example_values": [
                         1
-                    ]
-                },
-                {
-                    "data_path": "action_result.summary.node_name",
-                    "data_type": "string",
-                    "example_values": [
-                        "test8"
                     ]
                 }
             ],
@@ -415,30 +423,87 @@
                     "required": true,
                     "primary": true,
                     "contains": [
-                        "pool name"
+                        "f5 pool name"
                     ],
                     "order": 2
                 }
             },
             "output": [
                 {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "column_name": "Status",
+                    "column_order": 1,
+                    "example_values": [
+                        "success",
+                        "failed"
+                    ]
+                },
+                {
                     "data_path": "action_result.parameter.node_name",
                     "data_type": "string",
                     "contains": [
                         "f5 node name"
                     ],
-                    "column_name": "f5 node name",
+                    "column_name": "Node Name",
                     "column_order": 0,
                     "example_values": [
                         "test8"
                     ]
                 },
                 {
-                    "data_path": "action_result.status",
+                    "data_path": "action_result.parameter.pool_name",
                     "data_type": "string",
-                    "column_name": "status",
                     "example_values": [
-                        "success"
+                        "pool3"
+                    ],
+                    "contains": [
+                        "f5 pool name"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.port",
+                    "data_type": "string",
+                    "example_values": [
+                        "80",
+                        "443"
+                    ],
+                    "contains": [
+                        "port"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.summary.node_name",
+                    "data_type": "string",
+                    "example_values": [
+                        "test pool"
+                    ],
+                    "contains": [
+                        "f5 node name"
+                    ]
+                },
+                {
+                    "data_path": "action_result.summary.pool_name",
+                    "data_type": "string",
+                    "example_values": [
+                        "pool3"
+                    ],
+                    "contains": [
+                        "f5 pool name"
+                    ]
+                },
+                {
+                    "data_path": "action_result.summary.port",
+                    "data_type": "string",
+                    "example_values": [
+                        "80"
+                    ],
+                    "contains": [
+                        "port"
                     ]
                 },
                 {
@@ -461,27 +526,6 @@
                     "example_values": [
                         1
                     ]
-                },
-                {
-                    "data_path": "action_result.parameter.pool_name",
-                    "data_type": "string",
-                    "example_values": [
-                        "pool3"
-                    ],
-                    "contains": [
-                        "pool name"
-                    ]
-                },
-                {
-                    "data_path": "action_result.parameter.port",
-                    "data_type": "string",
-                    "example_values": [
-                        "80",
-                        "443"
-                    ],
-                    "contains": [
-                        "port"
-                    ]
                 }
             ],
             "render": {
@@ -502,7 +546,7 @@
                     "required": true,
                     "primary": true,
                     "contains": [
-                        "pool name"
+                        "f5 pool name"
                     ],
                     "order": 0
                 },
@@ -510,15 +554,16 @@
                     "description": "Description of the pool",
                     "data_type": "string",
                     "required": false,
-                    "contains": [],
                     "order": 1
                 },
                 "partition_name": {
                     "description": "Name of the partition",
                     "data_type": "string",
                     "required": true,
-                    "primary": false,
-                    "contains": [],
+                    "primary": true,
+                    "contains": [
+                        "f5 partition name"
+                    ],
                     "order": 2
                 }
             },
@@ -527,36 +572,41 @@
                     "data_path": "action_result.status",
                     "data_type": "string",
                     "example_values": [
-                        "success"
+                        "success",
+                        "failed"
                     ]
                 },
                 {
-                    "data_path": "action_result.data.*.generation",
-                    "data_type": "numeric",
-                    "example_values": [
-                        118,
-                        156
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.minActiveMembers",
-                    "data_type": "numeric",
-                    "example_values": [
-                        0
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.ipTosToServer",
+                    "data_path": "action_result.parameter.partition_name",
                     "data_type": "string",
+                    "column_name": "Partition",
+                    "column_order": 1,
                     "example_values": [
-                        "pass-through"
+                        "Common"
+                    ],
+                    "contains": [
+                        "f5 partition name"
                     ]
                 },
                 {
-                    "data_path": "action_result.data.*.loadBalancingMode",
+                    "data_path": "action_result.parameter.pool_description",
                     "data_type": "string",
+                    "column_name": "Pool Description",
+                    "column_order": 2,
                     "example_values": [
-                        "round-robin"
+                        "test pool creation"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.pool_name",
+                    "data_type": "string",
+                    "column_name": "Pool Name",
+                    "column_order": 0,
+                    "example_values": [
+                        "pool3"
+                    ],
+                    "contains": [
+                        "f5 pool name"
                     ]
                 },
                 {
@@ -567,10 +617,73 @@
                     ]
                 },
                 {
-                    "data_path": "action_result.data.*.queueDepthLimit",
+                    "data_path": "action_result.data.*.allowSnat",
+                    "data_type": "string",
+                    "example_values": [
+                        "yes"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.fullPath",
+                    "data_type": "string",
+                    "example_values": [
+                        "/Common/pool3"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.generation",
                     "data_type": "numeric",
                     "example_values": [
-                        0
+                        118
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.ignorePersistedWeight",
+                    "data_type": "string",
+                    "example_values": [
+                        "disabled"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.ipTosToClient",
+                    "data_type": "string",
+                    "example_values": [
+                        "pass-through"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.ipTosToServer",
+                    "data_type": "string",
+                    "example_values": [
+                        "pass-through"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.kind",
+                    "data_type": "string",
+                    "example_values": [
+                        "tm:ltm:pool:poolstate"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.linkQosToClient",
+                    "data_type": "string",
+                    "example_values": [
+                        "pass-through"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.linkQosToServer",
+                    "data_type": "string",
+                    "example_values": [
+                        "pass-through"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.loadBalancingMode",
+                    "data_type": "string",
+                    "example_values": [
+                        "round-robin"
                     ]
                 },
                 {
@@ -592,17 +705,17 @@
                     ]
                 },
                 {
-                    "data_path": "action_result.data.*.minUpMembers",
+                    "data_path": "action_result.data.*.minActiveMembers",
                     "data_type": "numeric",
                     "example_values": [
                         0
                     ]
                 },
                 {
-                    "data_path": "action_result.data.*.slowRampTime",
+                    "data_path": "action_result.data.*.minUpMembers",
                     "data_type": "numeric",
                     "example_values": [
-                        10
+                        0
                     ]
                 },
                 {
@@ -620,41 +733,6 @@
                     ]
                 },
                 {
-                    "data_path": "action_result.data.*.queueTimeLimit",
-                    "data_type": "numeric",
-                    "example_values": [
-                        0
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.linkQosToServer",
-                    "data_type": "string",
-                    "example_values": [
-                        "pass-through"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.queueOnConnectionLimit",
-                    "data_type": "string",
-                    "example_values": [
-                        "disabled"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.fullPath",
-                    "data_type": "string",
-                    "example_values": [
-                        "/Common/pool3"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.kind",
-                    "data_type": "string",
-                    "example_values": [
-                        "tm:ltm:pool:poolstate"
-                    ]
-                },
-                {
                     "data_path": "action_result.data.*.name",
                     "data_type": "string",
                     "example_values": [
@@ -669,17 +747,24 @@
                     ]
                 },
                 {
-                    "data_path": "action_result.data.*.allowSnat",
-                    "data_type": "string",
+                    "data_path": "action_result.data.*.queueDepthLimit",
+                    "data_type": "numeric",
                     "example_values": [
-                        "yes"
+                        0
                     ]
                 },
                 {
-                    "data_path": "action_result.data.*.ipTosToClient",
+                    "data_path": "action_result.data.*.queueOnConnectionLimit",
                     "data_type": "string",
                     "example_values": [
-                        "pass-through"
+                        "disabled"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.queueTimeLimit",
+                    "data_type": "numeric",
+                    "example_values": [
+                        0
                     ]
                 },
                 {
@@ -690,10 +775,13 @@
                     ]
                 },
                 {
-                    "data_path": "action_result.data.*.linkQosToClient",
+                    "data_path": "action_result.data.*.selfLink",
                     "data_type": "string",
                     "example_values": [
-                        "pass-through"
+                        "https://localhost/mgmt/tm/ltm/pool/~Common~test1pool?ver=15.0.0"
+                    ],
+                    "contains": [
+                        "url"
                     ]
                 },
                 {
@@ -704,81 +792,10 @@
                     ]
                 },
                 {
-                    "data_path": "action_result.data.*.ignorePersistedWeight",
-                    "data_type": "string",
-                    "example_values": [
-                        "disabled"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.selfLink",
-                    "data_type": "string",
-                    "example_values": [
-                        "https://localhost/mgmt/tm/ltm/pool/~Common~test1pool?ver=15.0.0",
-                        "https://localhost/mgmt/tm/ltm/pool/~Common~pool3?ver=15.0.0"
-                    ],
-                    "contains": [
-                        "url"
-                    ]
-                },
-                {
-                    "data_path": "action_result.message",
-                    "data_type": "string",
-                    "example_values": [
-                        "Successfully created pool"
-                    ]
-                },
-                {
-                    "data_path": "action_result.parameter.pool_name",
-                    "data_type": "string",
-                    "column_name": "pool name",
-                    "column_order": 0,
-                    "example_values": [
-                        "pool3"
-                    ],
-                    "contains": [
-                        "pool name"
-                    ]
-                },
-                {
-                    "data_path": "action_result.parameter.partition_name",
-                    "data_type": "string",
-                    "column_name": "partition",
-                    "column_order": 1,
-                    "example_values": [
-                        "Common"
-                    ],
-                    "contains": []
-                },
-                {
-                    "data_path": "action_result.parameter.pool_description",
-                    "data_type": "string",
-                    "column_name": "pool description",
-                    "column_order": 2,
-                    "example_values": [
-                        "test pool creation"
-                    ],
-                    "contains": []
-                },
-                {
-                    "data_path": "summary.total_objects",
+                    "data_path": "action_result.data.*.slowRampTime",
                     "data_type": "numeric",
                     "example_values": [
-                        1
-                    ]
-                },
-                {
-                    "data_path": "summary.total_objects_successful",
-                    "data_type": "numeric",
-                    "example_values": [
-                        1
-                    ]
-                },
-                {
-                    "data_path": "action_result.summary.pool_name",
-                    "data_type": "string",
-                    "example_values": [
-                        "pool3"
+                        10
                     ]
                 },
                 {
@@ -793,6 +810,34 @@
                     "data_type": "string",
                     "example_values": [
                         "test pool creation"
+                    ]
+                },
+                {
+                    "data_path": "action_result.summary.pool_name",
+                    "data_type": "string",
+                    "example_values": [
+                        "pool3"
+                    ]
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string",
+                    "example_values": [
+                        "Successfully created pool"
+                    ]
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
                     ]
                 }
             ],
@@ -822,8 +867,10 @@
                     "description": "Name of the partition to add node",
                     "data_type": "string",
                     "required": true,
-                    "primary": false,
-                    "contains": [],
+                    "primary": true,
+                    "contains": [
+                        "f5 partition name"
+                    ],
                     "order": 1
                 },
                 "port": {
@@ -842,16 +889,26 @@
                     "required": true,
                     "primary": true,
                     "contains": [
-                        "pool name"
+                        "f5 pool name"
                     ],
                     "order": 3
                 }
             },
             "output": [
                 {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "column_name": "Status",
+                    "column_order": 1,
+                    "example_values": [
+                        "success",
+                        "failed"
+                    ]
+                },
+                {
                     "data_path": "action_result.parameter.node_name",
                     "data_type": "string",
-                    "column_name": "f5 node name",
+                    "column_name": "Node Name",
                     "column_order": 0,
                     "example_values": [
                         "test8"
@@ -861,71 +918,59 @@
                     ]
                 },
                 {
-                    "data_path": "action_result.status",
-                    "data_type": "string",
-                    "column_name": "status",
-                    "example_values": [
-                        "success"
-                    ]
-                },
-                {
-                    "data_path": "action_result.message",
-                    "data_type": "string",
-                    "example_values": [
-                        "",
-                        "Node successfully added to pool"
-                    ]
-                },
-                {
-                    "data_path": "summary.total_objects",
-                    "data_type": "numeric",
-                    "example_values": [
-                        1
-                    ]
-                },
-                {
-                    "data_path": "summary.total_objects_successful",
-                    "data_type": "numeric",
-                    "example_values": [
-                        1
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.kind",
-                    "data_type": "string",
-                    "example_values": [
-                        "tm:ltm:pool:members:membersstate"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.ratio",
-                    "data_type": "numeric",
-                    "example_values": [
-                        1
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.name",
-                    "data_type": "string",
-                    "example_values": [
-                        "test7:80",
-                        "test8:443"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.generation",
-                    "data_type": "numeric",
-                    "example_values": [
-                        110,
-                        113,
-                        159
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.partition",
+                    "data_path": "action_result.parameter.partition_name",
                     "data_type": "string",
                     "example_values": [
                         "Common"
+                    ],
+                    "contains": [
+                        "f5 partition name"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.pool_name",
+                    "data_type": "string",
+                    "example_values": [
+                        "pool3"
+                    ],
+                    "contains": [
+                        "f5 pool name"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.port",
+                    "data_type": "string",
+                    "example_values": [
+                        "80",
+                        "443"
+                    ],
+                    "contains": [
+                        "port"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.address",
+                    "data_type": "string",
+                    "example_values": [
+                        "4.4.4.4",
+                        "1.1.1.1"
+                    ],
+                    "contains": [
+                        "ip"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.connectionLimit",
+                    "data_type": "numeric",
+                    "example_values": [
+                        0
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.dynamicRatio",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
                     ]
                 },
                 {
@@ -943,11 +988,92 @@
                     ]
                 },
                 {
-                    "data_path": "action_result.data.*.state",
+                    "data_path": "action_result.data.*.fullPath",
                     "data_type": "string",
                     "example_values": [
-                        "checking",
-                        "unchecked"
+                        "/Common/test7:80",
+                        "/Common/test8:443"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.generation",
+                    "data_type": "numeric",
+                    "example_values": [
+                        110
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.inheritProfile",
+                    "data_type": "string",
+                    "example_values": [
+                        "enabled"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.kind",
+                    "data_type": "string",
+                    "example_values": [
+                        "tm:ltm:pool:members:membersstate"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.logging",
+                    "data_type": "string",
+                    "example_values": [
+                        "disabled"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.monitor",
+                    "data_type": "string",
+                    "example_values": [
+                        "default"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.name",
+                    "data_type": "string",
+                    "example_values": [
+                        "test7:80",
+                        "test8:443"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.partition",
+                    "data_type": "string",
+                    "example_values": [
+                        "Common"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.priorityGroup",
+                    "data_type": "numeric",
+                    "example_values": [
+                        0
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.rateLimit",
+                    "data_type": "string",
+                    "example_values": [
+                        "disabled"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.ratio",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.selfLink",
+                    "data_type": "string",
+                    "example_values": [
+                        "https://localhost/mgmt/tm/ltm/pool/pool1/members/~Common~test7:80?ver=15.0.0"
+                    ],
+                    "contains": [
+                        "url"
                     ]
                 },
                 {
@@ -959,112 +1085,19 @@
                     ]
                 },
                 {
-                    "data_path": "action_result.data.*.priorityGroup",
-                    "data_type": "numeric",
-                    "example_values": [
-                        0
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.logging",
+                    "data_path": "action_result.data.*.state",
                     "data_type": "string",
                     "example_values": [
-                        "disabled"
+                        "checking",
+                        "unchecked"
                     ]
                 },
                 {
-                    "data_path": "action_result.data.*.connectionLimit",
-                    "data_type": "numeric",
-                    "example_values": [
-                        0
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.address",
+                    "data_path": "action_result.summary.node_name",
                     "data_type": "string",
                     "example_values": [
-                        "4.4.4.4",
-                        "1.1.1.1"
-                    ],
-                    "contains": [
-                        "ip"
+                        "test8:443"
                     ]
-                },
-                {
-                    "data_path": "action_result.data.*.dynamicRatio",
-                    "data_type": "numeric",
-                    "example_values": [
-                        1
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.fullPath",
-                    "data_type": "string",
-                    "example_values": [
-                        "/Common/test7:80",
-                        "/Common/test8:443"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.inheritProfile",
-                    "data_type": "string",
-                    "example_values": [
-                        "enabled"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.rateLimit",
-                    "data_type": "string",
-                    "example_values": [
-                        "disabled"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.selfLink",
-                    "data_type": "string",
-                    "example_values": [
-                        "https://localhost/mgmt/tm/ltm/pool/pool1/members/~Common~test7:80?ver=15.0.0",
-                        "https://localhost/mgmt/tm/ltm/pool/pool3/members/~Common~test8:443?ver=15.0.0"
-                    ],
-                    "contains": [
-                        "url"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.monitor",
-                    "data_type": "string",
-                    "example_values": [
-                        "default"
-                    ]
-                },
-                {
-                    "data_path": "action_result.parameter.pool_name",
-                    "data_type": "string",
-                    "example_values": [
-                        "pool3"
-                    ],
-                    "contains": [
-                        "pool name"
-                    ]
-                },
-                {
-                    "data_path": "action_result.parameter.port",
-                    "data_type": "string",
-                    "example_values": [
-                        "80",
-                        "443"
-                    ],
-                    "contains": [
-                        "port"
-                    ]
-                },
-                {
-                    "data_path": "action_result.parameter.partition_name",
-                    "data_type": "string",
-                    "example_values": [
-                        "Common"
-                    ],
-                    "contains": []
                 },
                 {
                     "data_path": "action_result.summary.pool_name",
@@ -1081,10 +1114,24 @@
                     ]
                 },
                 {
-                    "data_path": "action_result.summary.node_name",
+                    "data_path": "action_result.message",
                     "data_type": "string",
                     "example_values": [
-                        "test8:443"
+                        "Node successfully added to pool"
+                    ]
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
                     ]
                 }
             ],
@@ -1113,9 +1160,19 @@
             },
             "output": [
                 {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "column_name": "Status",
+                    "column_order": 1,
+                    "example_values": [
+                        "success",
+                        "failed"
+                    ]
+                },
+                {
                     "data_path": "action_result.parameter.node_name",
                     "data_type": "string",
-                    "column_name": "node name",
+                    "column_name": "Node Name",
                     "column_order": 0,
                     "example_values": [
                         "test8"
@@ -1125,64 +1182,28 @@
                     ]
                 },
                 {
-                    "data_path": "action_result.status",
+                    "data_path": "action_result.data.*.address",
                     "data_type": "string",
-                    "column_name": "status",
                     "example_values": [
-                        "success"
+                        "4.4.4.4",
+                        "1.1.1.1"
+                    ],
+                    "contains": [
+                        "ip"
                     ]
                 },
                 {
-                    "data_path": "action_result.message",
-                    "data_type": "string",
+                    "data_path": "action_result.data.*.connectionLimit",
+                    "data_type": "numeric",
                     "example_values": [
-                        "",
-                        "Successfully disabled node"
+                        0
                     ]
                 },
                 {
-                    "data_path": "summary.total_objects",
+                    "data_path": "action_result.data.*.dynamicRatio",
                     "data_type": "numeric",
                     "example_values": [
                         1
-                    ]
-                },
-                {
-                    "data_path": "summary.total_objects_successful",
-                    "data_type": "numeric",
-                    "example_values": [
-                        1
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.kind",
-                    "data_type": "string",
-                    "example_values": [
-                        "tm:ltm:node:nodestate"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.ratio",
-                    "data_type": "numeric",
-                    "example_values": [
-                        1
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.name",
-                    "data_type": "string",
-                    "example_values": [
-                        "test7",
-                        "test8"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.generation",
-                    "data_type": "numeric",
-                    "example_values": [
-                        115,
-                        152,
-                        154
                     ]
                 },
                 {
@@ -1190,6 +1211,13 @@
                     "data_type": "string",
                     "example_values": [
                         "false"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.fqdn.addressFamily",
+                    "data_type": "string",
+                    "example_values": [
+                        "ipv4"
                     ]
                 },
                 {
@@ -1207,63 +1235,10 @@
                     ]
                 },
                 {
-                    "data_path": "action_result.data.*.fqdn.addressFamily",
-                    "data_type": "string",
-                    "example_values": [
-                        "ipv4"
-                    ]
-                },
-                {
                     "data_path": "action_result.data.*.fqdn.interval",
                     "data_type": "string",
                     "example_values": [
                         "3600"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.state",
-                    "data_type": "string",
-                    "example_values": [
-                        "unchecked"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.session",
-                    "data_type": "string",
-                    "example_values": [
-                        "user-disabled"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.dynamicRatio",
-                    "data_type": "numeric",
-                    "example_values": [
-                        1
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.connectionLimit",
-                    "data_type": "numeric",
-                    "example_values": [
-                        0
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.address",
-                    "data_type": "string",
-                    "example_values": [
-                        "4.4.4.4",
-                        "1.1.1.1"
-                    ],
-                    "contains": [
-                        "ip"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.logging",
-                    "data_type": "string",
-                    "example_values": [
-                        "disabled"
                     ]
                 },
                 {
@@ -1275,21 +1250,24 @@
                     ]
                 },
                 {
-                    "data_path": "action_result.data.*.rateLimit",
-                    "data_type": "string",
+                    "data_path": "action_result.data.*.generation",
+                    "data_type": "numeric",
                     "example_values": [
-                        "disabled"
+                        115
                     ]
                 },
                 {
-                    "data_path": "action_result.data.*.selfLink",
+                    "data_path": "action_result.data.*.kind",
                     "data_type": "string",
                     "example_values": [
-                        "https://localhost/mgmt/tm/ltm/node/test7?ver=15.0.0",
-                        "https://localhost/mgmt/tm/ltm/node/test8?ver=15.0.0"
-                    ],
-                    "contains": [
-                        "url"
+                        "tm:ltm:node:nodestate"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.logging",
+                    "data_type": "string",
+                    "example_values": [
+                        "disabled"
                     ]
                 },
                 {
@@ -1300,10 +1278,76 @@
                     ]
                 },
                 {
+                    "data_path": "action_result.data.*.name",
+                    "data_type": "string",
+                    "example_values": [
+                        "test7"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.rateLimit",
+                    "data_type": "string",
+                    "example_values": [
+                        "disabled"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.ratio",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.selfLink",
+                    "data_type": "string",
+                    "example_values": [
+                        "https://localhost/mgmt/tm/ltm/node/test7?ver=15.0.0"
+                    ],
+                    "contains": [
+                        "url"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.session",
+                    "data_type": "string",
+                    "example_values": [
+                        "user-disabled"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.state",
+                    "data_type": "string",
+                    "example_values": [
+                        "unchecked"
+                    ]
+                },
+                {
                     "data_path": "action_result.summary.node_name",
                     "data_type": "string",
                     "example_values": [
                         "test8"
+                    ]
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string",
+                    "example_values": [
+                        "Successfully disabled node"
+                    ]
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
                     ]
                 }
             ],
@@ -1332,13 +1376,21 @@
             },
             "output": [
                 {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "column_name": "Status",
+                    "column_order": 1,
+                    "example_values": [
+                        "success",
+                        "failed"
+                    ]
+                },
+                {
                     "data_path": "action_result.parameter.node_name",
                     "data_type": "string",
-                    "column_name": "node name",
+                    "column_name": "Node Name",
                     "column_order": 0,
                     "example_values": [
-                        "nginx1",
-                        "nginx4",
                         "test8"
                     ],
                     "contains": [
@@ -1346,67 +1398,27 @@
                     ]
                 },
                 {
-                    "data_path": "action_result.status",
+                    "data_path": "action_result.data.*.address",
                     "data_type": "string",
-                    "column_name": "status",
                     "example_values": [
-                        "success"
+                        "1.1.1.1"
+                    ],
+                    "contains": [
+                        "ip"
                     ]
                 },
                 {
-                    "data_path": "action_result.message",
-                    "data_type": "string",
+                    "data_path": "action_result.data.*.connectionLimit",
+                    "data_type": "numeric",
                     "example_values": [
-                        "",
-                        "Successfully enabled node"
+                        0
                     ]
                 },
                 {
-                    "data_path": "summary.total_objects",
+                    "data_path": "action_result.data.*.dynamicRatio",
                     "data_type": "numeric",
                     "example_values": [
                         1
-                    ]
-                },
-                {
-                    "data_path": "summary.total_objects_successful",
-                    "data_type": "numeric",
-                    "example_values": [
-                        1
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.kind",
-                    "data_type": "string",
-                    "example_values": [
-                        "tm:ltm:node:nodestate"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.ratio",
-                    "data_type": "numeric",
-                    "example_values": [
-                        1
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.name",
-                    "data_type": "string",
-                    "example_values": [
-                        "nginx1",
-                        "nginx4",
-                        "test8"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.generation",
-                    "data_type": "numeric",
-                    "example_values": [
-                        46,
-                        47,
-                        77,
-                        153,
-                        155
                     ]
                 },
                 {
@@ -1414,6 +1426,13 @@
                     "data_type": "string",
                     "example_values": [
                         "false"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.fqdn.addressFamily",
+                    "data_type": "string",
+                    "example_values": [
+                        "ipv4"
                     ]
                 },
                 {
@@ -1431,13 +1450,6 @@
                     ]
                 },
                 {
-                    "data_path": "action_result.data.*.fqdn.addressFamily",
-                    "data_type": "string",
-                    "example_values": [
-                        "ipv4"
-                    ]
-                },
-                {
                     "data_path": "action_result.data.*.fqdn.interval",
                     "data_type": "string",
                     "example_values": [
@@ -1445,43 +1457,24 @@
                     ]
                 },
                 {
-                    "data_path": "action_result.data.*.state",
+                    "data_path": "action_result.data.*.fullPath",
                     "data_type": "string",
                     "example_values": [
-                        "unchecked"
+                        "test8"
                     ]
                 },
                 {
-                    "data_path": "action_result.data.*.session",
-                    "data_type": "string",
-                    "example_values": [
-                        "user-enabled"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.dynamicRatio",
+                    "data_path": "action_result.data.*.generation",
                     "data_type": "numeric",
                     "example_values": [
-                        1
+                        46
                     ]
                 },
                 {
-                    "data_path": "action_result.data.*.connectionLimit",
-                    "data_type": "numeric",
-                    "example_values": [
-                        0
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.address",
+                    "data_path": "action_result.data.*.kind",
                     "data_type": "string",
                     "example_values": [
-                        "10.1.17.76",
-                        "192.168.10.10",
-                        "1.1.1.1"
-                    ],
-                    "contains": [
-                        "ip"
+                        "tm:ltm:node:nodestate"
                     ]
                 },
                 {
@@ -1492,11 +1485,16 @@
                     ]
                 },
                 {
-                    "data_path": "action_result.data.*.fullPath",
+                    "data_path": "action_result.data.*.monitor",
                     "data_type": "string",
                     "example_values": [
-                        "nginx1",
-                        "nginx4",
+                        "default"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.name",
+                    "data_type": "string",
+                    "example_values": [
                         "test8"
                     ]
                 },
@@ -1508,22 +1506,34 @@
                     ]
                 },
                 {
+                    "data_path": "action_result.data.*.ratio",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
                     "data_path": "action_result.data.*.selfLink",
                     "data_type": "string",
                     "example_values": [
-                        "https://localhost/mgmt/tm/ltm/node/nginx1?ver=15.0.0",
-                        "https://localhost/mgmt/tm/ltm/node/nginx4?ver=15.0.0",
-                        "https://localhost/mgmt/tm/ltm/node/test8?ver=15.0.0"
+                        "https://localhost/mgmt/tm/ltm/node/nginx1?ver=15.0.0"
                     ],
                     "contains": [
                         "url"
                     ]
                 },
                 {
-                    "data_path": "action_result.data.*.monitor",
+                    "data_path": "action_result.data.*.session",
                     "data_type": "string",
                     "example_values": [
-                        "default"
+                        "user-enabled"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.state",
+                    "data_type": "string",
+                    "example_values": [
+                        "unchecked"
                     ]
                 },
                 {
@@ -1531,6 +1541,27 @@
                     "data_type": "string",
                     "example_values": [
                         "test8"
+                    ]
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string",
+                    "example_values": [
+                        "Successfully enabled node"
+                    ]
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
                     ]
                 }
             ],
@@ -1550,29 +1581,178 @@
                     "description": "Name of the node to describe",
                     "data_type": "string",
                     "required": true,
-                    "primary": false,
-                    "contains": [],
                     "order": 0
                 }
             },
             "output": [
                 {
-                    "data_path": "action_result.parameter.node_name",
-                    "data_type": "string",
-                    "column_name": "node name",
-                    "column_order": 0,
-                    "example_values": [
-                        "nginx1",
-                        "nginx6"
-                    ],
-                    "contains": []
-                },
-                {
                     "data_path": "action_result.status",
                     "data_type": "string",
-                    "column_name": "status",
+                    "column_name": "Status",
+                    "column_order": 1,
                     "example_values": [
-                        "success"
+                        "success",
+                        "failed"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.node_name",
+                    "data_type": "string",
+                    "column_name": "Node Name",
+                    "column_order": 0,
+                    "example_values": [
+                        "test8"
+                    ],
+                    "contains": [
+                        "f5 node name"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.address",
+                    "data_type": "string",
+                    "example_values": [
+                        "1.1.1.1"
+                    ],
+                    "contains": [
+                        "ip"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.connectionLimit",
+                    "data_type": "numeric",
+                    "example_values": [
+                        0
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.dynamicRatio",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.ephemeral",
+                    "data_type": "string",
+                    "example_values": [
+                        "false"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.fqdn.addressFamily",
+                    "data_type": "string",
+                    "example_values": [
+                        "ipv4"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.fqdn.autopopulate",
+                    "data_type": "string",
+                    "example_values": [
+                        "disabled"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.fqdn.downInterval",
+                    "data_type": "numeric",
+                    "example_values": [
+                        5
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.fqdn.interval",
+                    "data_type": "string",
+                    "example_values": [
+                        "3600"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.fullPath",
+                    "data_type": "string",
+                    "example_values": [
+                        "testpath"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.generation",
+                    "data_type": "numeric",
+                    "example_values": [
+                        45,
+                        78
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.kind",
+                    "data_type": "string",
+                    "example_values": [
+                        "tm:ltm:node:nodestate"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.logging",
+                    "data_type": "string",
+                    "example_values": [
+                        "disabled"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.monitor",
+                    "data_type": "string",
+                    "example_values": [
+                        "default"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.name",
+                    "data_type": "string",
+                    "example_values": [
+                        "test8"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.rateLimit",
+                    "data_type": "string",
+                    "example_values": [
+                        "disabled"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.ratio",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.selfLink",
+                    "data_type": "string",
+                    "example_values": [
+                        "https://localhost/mgmt/tm/ltm/node/nginx1?ver=15.0.0"
+                    ],
+                    "contains": [
+                        "url"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.session",
+                    "data_type": "string",
+                    "example_values": [
+                        "user-disabled",
+                        "user-enabled"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.state",
+                    "data_type": "string",
+                    "example_values": [
+                        "unchecked"
+                    ]
+                },
+                {
+                    "data_path": "action_result.summary.state",
+                    "data_type": "string",
+                    "example_values": [
+                        "unchecked"
                     ]
                 },
                 {
@@ -1595,158 +1775,6 @@
                     "example_values": [
                         1
                     ]
-                },
-                {
-                    "data_path": "action_result.data.*.kind",
-                    "data_type": "string",
-                    "example_values": [
-                        "tm:ltm:node:nodestate"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.ratio",
-                    "data_type": "numeric",
-                    "example_values": [
-                        1
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.name",
-                    "data_type": "string",
-                    "example_values": [
-                        "nginx1",
-                        "nginx6"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.generation",
-                    "data_type": "numeric",
-                    "example_values": [
-                        45,
-                        78
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.ephemeral",
-                    "data_type": "string",
-                    "example_values": [
-                        "false"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.fqdn.autopopulate",
-                    "data_type": "string",
-                    "example_values": [
-                        "disabled"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.fqdn.downInterval",
-                    "data_type": "numeric",
-                    "example_values": [
-                        5
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.fqdn.addressFamily",
-                    "data_type": "string",
-                    "example_values": [
-                        "ipv4"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.fqdn.interval",
-                    "data_type": "string",
-                    "example_values": [
-                        "3600"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.state",
-                    "data_type": "string",
-                    "example_values": [
-                        "unchecked"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.session",
-                    "data_type": "string",
-                    "example_values": [
-                        "user-disabled",
-                        "user-enabled"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.dynamicRatio",
-                    "data_type": "numeric",
-                    "example_values": [
-                        1
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.connectionLimit",
-                    "data_type": "numeric",
-                    "example_values": [
-                        0
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.address",
-                    "data_type": "string",
-                    "example_values": [
-                        "10.1.17.76",
-                        "1.1.1.1"
-                    ],
-                    "contains": [
-                        "ip"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.logging",
-                    "data_type": "string",
-                    "example_values": [
-                        "disabled"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.fullPath",
-                    "data_type": "string",
-                    "example_values": [
-                        "nginx1",
-                        "nginx6"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.rateLimit",
-                    "data_type": "string",
-                    "example_values": [
-                        "disabled"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.selfLink",
-                    "data_type": "string",
-                    "example_values": [
-                        "https://localhost/mgmt/tm/ltm/node/nginx1?ver=15.0.0",
-                        "https://localhost/mgmt/tm/ltm/node/nginx6?ver=15.0.0"
-                    ],
-                    "contains": [
-                        "url"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.monitor",
-                    "data_type": "string",
-                    "example_values": [
-                        "default"
-                    ]
-                },
-                {
-                    "data_path": "action_result.summary.state",
-                    "data_type": "string",
-                    "example_values": [
-                        "unchecked"
-                    ]
                 }
             ],
             "render": {
@@ -1766,7 +1794,173 @@
                     "data_path": "action_result.status",
                     "data_type": "string",
                     "example_values": [
-                        "success"
+                        "success",
+                        "failed"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.address",
+                    "data_type": "string",
+                    "column_name": "Address",
+                    "column_order": 2,
+                    "example_values": [
+                        "10.1.1.1"
+                    ],
+                    "contains": [
+                        "ip"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.connectionLimit",
+                    "data_type": "numeric",
+                    "column_name": "Connection Limit",
+                    "column_order": 5,
+                    "example_values": [
+                        0
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.dynamicRatio",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.ephemeral",
+                    "data_type": "string",
+                    "example_values": [
+                        "false"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.fqdn.addressFamily",
+                    "data_type": "string",
+                    "example_values": [
+                        "ipv4"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.fqdn.autopopulate",
+                    "data_type": "string",
+                    "example_values": [
+                        "disabled"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.fqdn.downInterval",
+                    "data_type": "numeric",
+                    "example_values": [
+                        5
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.fqdn.interval",
+                    "data_type": "string",
+                    "example_values": [
+                        "3600"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.fullPath",
+                    "data_type": "string",
+                    "example_values": [
+                        "/Common/test1"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.generation",
+                    "data_type": "numeric",
+                    "example_values": [
+                        68
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.kind",
+                    "data_type": "string",
+                    "example_values": [
+                        "tm:ltm:node:nodestate"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.logging",
+                    "data_type": "string",
+                    "column_name": "Logging",
+                    "column_order": 3,
+                    "example_values": [
+                        "disabled"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.monitor",
+                    "data_type": "string",
+                    "column_name": "Monitor",
+                    "column_order": 4,
+                    "example_values": [
+                        "default"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.name",
+                    "data_type": "string",
+                    "column_name": "Node Name",
+                    "column_order": 0,
+                    "example_values": [
+                        "test8"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.partition",
+                    "data_type": "string",
+                    "column_name": "Partition",
+                    "column_order": 1,
+                    "example_values": [
+                        "Common"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.rateLimit",
+                    "data_type": "string",
+                    "example_values": [
+                        "disabled"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.ratio",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.selfLink",
+                    "data_type": "string",
+                    "example_values": [
+                        "https://localhost/mgmt/tm/ltm/node/~Common~nginx1?ver=15.0.0"
+                    ],
+                    "contains": [
+                        "url"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.session",
+                    "data_type": "string",
+                    "example_values": [
+                        "user-enabled"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.state",
+                    "data_type": "string",
+                    "example_values": [
+                        "unchecked"
+                    ]
+                },
+                {
+                    "data_path": "action_result.summary.num_nodes",
+                    "data_type": "numeric",
+                    "example_values": [
+                        4
                     ]
                 },
                 {
@@ -1789,171 +1983,6 @@
                     "example_values": [
                         1
                     ]
-                },
-                {
-                    "data_path": "action_result.data.*.kind",
-                    "data_type": "string",
-                    "example_values": [
-                        "tm:ltm:node:nodestate"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.ratio",
-                    "data_type": "numeric",
-                    "example_values": [
-                        1
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.name",
-                    "data_type": "string",
-                    "column_name": "node name",
-                    "column_order": 0,
-                    "example_values": [
-                        "test8"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.generation",
-                    "data_type": "numeric",
-                    "example_values": [
-                        68
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.partition",
-                    "data_type": "string",
-                    "column_name": "partition",
-                    "column_order": 1,
-                    "example_values": [
-                        "Common"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.ephemeral",
-                    "data_type": "string",
-                    "example_values": [
-                        "false"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.fqdn.autopopulate",
-                    "data_type": "string",
-                    "example_values": [
-                        "disabled"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.fqdn.downInterval",
-                    "data_type": "numeric",
-                    "example_values": [
-                        5
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.fqdn.addressFamily",
-                    "data_type": "string",
-                    "example_values": [
-                        "ipv4"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.fqdn.interval",
-                    "data_type": "string",
-                    "example_values": [
-                        "3600"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.state",
-                    "data_type": "string",
-                    "example_values": [
-                        "unchecked"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.session",
-                    "data_type": "string",
-                    "example_values": [
-                        "user-enabled"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.dynamicRatio",
-                    "data_type": "numeric",
-                    "example_values": [
-                        1
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.connectionLimit",
-                    "data_type": "numeric",
-                    "column_name": "connection limit",
-                    "column_order": 5,
-                    "example_values": [
-                        0
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.address",
-                    "data_type": "string",
-                    "column_name": "address",
-                    "column_order": 2,
-                    "example_values": [
-                        "10.1.17.76"
-                    ],
-                    "contains": [
-                        "ip"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.logging",
-                    "data_type": "string",
-                    "column_name": "logging",
-                    "column_order": 3,
-                    "example_values": [
-                        "disabled"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.fullPath",
-                    "data_type": "string",
-                    "example_values": [
-                        "/Common/test1"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.rateLimit",
-                    "data_type": "string",
-                    "example_values": [
-                        "disabled"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.selfLink",
-                    "data_type": "string",
-                    "example_values": [
-                        "https://localhost/mgmt/tm/ltm/node/~Common~nginx1?ver=15.0.0"
-                    ],
-                    "contains": [
-                        "url"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.monitor",
-                    "data_type": "string",
-                    "column_name": "monitor",
-                    "column_order": 4,
-                    "example_values": [
-                        "default"
-                    ]
-                },
-                {
-                    "data_path": "action_result.summary.num_nodes",
-                    "data_type": "numeric",
-                    "example_values": [
-                        4
-                    ]
                 }
             ],
             "render": {
@@ -1973,37 +2002,201 @@
                     "data_path": "action_result.status",
                     "data_type": "string",
                     "example_values": [
-                        "failed",
-                        "success"
+                        "success",
+                        "failed"
                     ]
                 },
                 {
-                    "data_path": "action_result.message",
+                    "data_path": "action_result.data.*.allowNat",
                     "data_type": "string",
                     "example_values": [
-                        "Num pools: 2"
+                        "yes"
                     ]
                 },
                 {
-                    "data_path": "summary.total_objects",
+                    "data_path": "action_result.data.*.allowSnat",
+                    "data_type": "string",
+                    "example_values": [
+                        "yes"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.fullPath",
+                    "data_type": "string",
+                    "example_values": [
+                        "/Common/pool1"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.generation",
                     "data_type": "numeric",
                     "example_values": [
-                        1
+                        66
                     ]
                 },
                 {
-                    "data_path": "summary.total_objects_successful",
+                    "data_path": "action_result.data.*.ignorePersistedWeight",
+                    "data_type": "string",
+                    "example_values": [
+                        "disabled"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.ipTosToClient",
+                    "data_type": "string",
+                    "example_values": [
+                        "pass-through"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.ipTosToServer",
+                    "data_type": "string",
+                    "example_values": [
+                        "pass-through"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.items.*.addressStatus",
+                    "data_type": "string",
+                    "example_values": [
+                        "yes"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.items.*.autoLasthop",
+                    "data_type": "string",
+                    "example_values": [
+                        "default"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.items.*.cmpEnabled",
+                    "data_type": "string",
+                    "example_values": [
+                        "yes"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.items.*.connectionLimit",
                     "data_type": "numeric",
                     "example_values": [
-                        1
+                        0
                     ]
                 },
                 {
-                    "data_path": "action_result.data.*.items.*.vlansDisabled",
+                    "data_path": "action_result.data.*.items.*.creationTime",
+                    "data_type": "string",
+                    "example_values": [
+                        "2019-08-30T00:04:17Z"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.items.*.destination",
+                    "data_type": "string",
+                    "example_values": [
+                        "/Common/10.1.16.148:80"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.items.*.enabled",
                     "data_type": "boolean",
                     "example_values": [
                         true,
                         false
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.items.*.evictionProtected",
+                    "data_type": "string",
+                    "example_values": [
+                        "disabled"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.items.*.fullPath",
+                    "data_type": "string",
+                    "example_values": [
+                        "/Common/vip"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.items.*.generation",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.items.*.gtmScore",
+                    "data_type": "numeric",
+                    "example_values": [
+                        0
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.items.*.ipProtocol",
+                    "data_type": "string",
+                    "example_values": [
+                        "tcp"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.items.*.kind",
+                    "data_type": "string",
+                    "example_values": [
+                        "tm:ltm:virtual:virtualstate"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.items.*.lastModifiedTime",
+                    "data_type": "string",
+                    "example_values": [
+                        "2019-08-30T00:05:23Z"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.items.*.mask",
+                    "data_type": "string",
+                    "example_values": [
+                        "255.255.255.255"
+                    ],
+                    "contains": [
+                        "ip"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.items.*.mirror",
+                    "data_type": "string",
+                    "example_values": [
+                        "disabled"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.items.*.mobileAppTunnel",
+                    "data_type": "string",
+                    "example_values": [
+                        "disabled"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.items.*.name",
+                    "data_type": "string",
+                    "example_values": [
+                        "vip"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.items.*.nat64",
+                    "data_type": "string",
+                    "example_values": [
+                        "disabled"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.items.*.partition",
+                    "data_type": "string",
+                    "example_values": [
+                        "Common"
                     ]
                 },
                 {
@@ -2025,68 +2218,20 @@
                     ]
                 },
                 {
-                    "data_path": "action_result.data.*.items.*.generation",
-                    "data_type": "numeric",
-                    "example_values": [
-                        1
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.items.*.creationTime",
-                    "data_type": "string",
-                    "column_name": "creation time",
-                    "column_order": 5,
-                    "example_values": [
-                        "2019-08-30T00:04:17Z"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.items.*.evictionProtected",
+                    "data_path": "action_result.data.*.items.*.pool",
                     "data_type": "string",
                     "example_values": [
-                        "disabled"
+                        "/Common/pool1"
                     ]
                 },
                 {
-                    "data_path": "action_result.data.*.items.*.serviceDownImmediateAction",
+                    "data_path": "action_result.data.*.items.*.poolReference.link",
                     "data_type": "string",
                     "example_values": [
-                        "none"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.items.*.connectionLimit",
-                    "data_type": "numeric",
-                    "example_values": [
-                        0
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.items.*.mirror",
-                    "data_type": "string",
-                    "example_values": [
-                        "disabled"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.items.*.fullPath",
-                    "data_type": "string",
-                    "example_values": [
-                        "/Common/vip"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.items.*.vsIndex",
-                    "data_type": "numeric",
-                    "example_values": [
-                        2
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.items.*.destination",
-                    "data_type": "string",
-                    "example_values": [
-                        "/Common/10.1.16.148:80"
+                        "https://localhost/mgmt/tm/ltm/pool/~Common~pool1?ver=15.0.0"
+                    ],
+                    "contains": [
+                        "url"
                     ]
                 },
                 {
@@ -2108,162 +2253,6 @@
                     ]
                 },
                 {
-                    "data_path": "action_result.data.*.items.*.source",
-                    "data_type": "string",
-                    "example_values": [
-                        "0.0.0.0/0"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.items.*.translatePort",
-                    "data_type": "string",
-                    "example_values": [
-                        "enabled"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.items.*.autoLasthop",
-                    "data_type": "string",
-                    "example_values": [
-                        "default"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.items.*.gtmScore",
-                    "data_type": "numeric",
-                    "example_values": [
-                        0
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.items.*.enabled",
-                    "data_type": "boolean",
-                    "example_values": [
-                        true,
-                        false
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.items.*.nat64",
-                    "data_type": "string",
-                    "example_values": [
-                        "disabled"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.items.*.sourceAddressTranslation.type",
-                    "data_type": "string",
-                    "example_values": [
-                        "none"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.items.*.synCookieStatus",
-                    "data_type": "string",
-                    "example_values": [
-                        "not-activated"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.items.*.poolReference.link",
-                    "data_type": "string",
-                    "example_values": [
-                        "https://localhost/mgmt/tm/ltm/pool/~Common~pool1?ver=15.0.0"
-                    ],
-                    "contains": [
-                        "url"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.items.*.sourcePort",
-                    "data_type": "string",
-                    "example_values": [
-                        "preserve"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.items.*.ipProtocol",
-                    "data_type": "string",
-                    "example_values": [
-                        "tcp"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.items.*.lastModifiedTime",
-                    "data_type": "string",
-                    "column_name": "last modified time",
-                    "column_order": 4,
-                    "example_values": [
-                        "2019-08-30T00:05:23Z"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.items.*.addressStatus",
-                    "data_type": "string",
-                    "example_values": [
-                        "yes"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.items.*.pool",
-                    "data_type": "string",
-                    "example_values": [
-                        "/Common/pool1"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.items.*.rateLimitDstMask",
-                    "data_type": "numeric",
-                    "example_values": [
-                        0
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.items.*.kind",
-                    "data_type": "string",
-                    "example_values": [
-                        "tm:ltm:virtual:virtualstate"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.items.*.name",
-                    "data_type": "string",
-                    "example_values": [
-                        "vip"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.items.*.translateAddress",
-                    "data_type": "string",
-                    "example_values": [
-                        "enabled"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.items.*.partition",
-                    "data_type": "string",
-                    "example_values": [
-                        "Common"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.items.*.mask",
-                    "data_type": "string",
-                    "example_values": [
-                        "255.255.255.255"
-                    ],
-                    "contains": [
-                        "ip"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.items.*.cmpEnabled",
-                    "data_type": "string",
-                    "example_values": [
-                        "yes"
-                    ]
-                },
-                {
                     "data_path": "action_result.data.*.items.*.rateLimit",
                     "data_type": "string",
                     "example_values": [
@@ -2271,10 +2260,10 @@
                     ]
                 },
                 {
-                    "data_path": "action_result.data.*.items.*.mobileAppTunnel",
-                    "data_type": "string",
+                    "data_path": "action_result.data.*.items.*.rateLimitDstMask",
+                    "data_type": "numeric",
                     "example_values": [
-                        "disabled"
+                        0
                     ]
                 },
                 {
@@ -2302,6 +2291,70 @@
                     ]
                 },
                 {
+                    "data_path": "action_result.data.*.items.*.serviceDownImmediateAction",
+                    "data_type": "string",
+                    "example_values": [
+                        "none"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.items.*.source",
+                    "data_type": "string",
+                    "example_values": [
+                        "0.0.0.0/0"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.items.*.sourceAddressTranslation.type",
+                    "data_type": "string",
+                    "example_values": [
+                        "none"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.items.*.sourcePort",
+                    "data_type": "string",
+                    "example_values": [
+                        "preserve"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.items.*.synCookieStatus",
+                    "data_type": "string",
+                    "example_values": [
+                        "not-activated"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.items.*.translateAddress",
+                    "data_type": "string",
+                    "example_values": [
+                        "enabled"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.items.*.translatePort",
+                    "data_type": "string",
+                    "example_values": [
+                        "enabled"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.items.*.vlansDisabled",
+                    "data_type": "boolean",
+                    "example_values": [
+                        true,
+                        false
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.items.*.vsIndex",
+                    "data_type": "numeric",
+                    "example_values": [
+                        2
+                    ]
+                },
+                {
                     "data_path": "action_result.data.*.kind",
                     "data_type": "string",
                     "example_values": [
@@ -2310,33 +2363,14 @@
                     ]
                 },
                 {
-                    "data_path": "action_result.data.*.selfLink",
+                    "data_path": "action_result.data.*.linkQosToClient",
                     "data_type": "string",
                     "example_values": [
-                        "https://localhost/mgmt/tm/ltm/virtual?ver=15.0.0",
-                        "https://localhost/mgmt/tm/ltm/pool/~Common~pool1?ver=15.0.0"
-                    ],
-                    "contains": [
-                        "url"
+                        "pass-through"
                     ]
                 },
                 {
-                    "data_path": "action_result.data.*.generation",
-                    "data_type": "numeric",
-                    "example_values": [
-                        66,
-                        116
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.minActiveMembers",
-                    "data_type": "numeric",
-                    "example_values": [
-                        0
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.ipTosToServer",
+                    "data_path": "action_result.data.*.linkQosToServer",
                     "data_type": "string",
                     "example_values": [
                         "pass-through"
@@ -2345,24 +2379,10 @@
                 {
                     "data_path": "action_result.data.*.loadBalancingMode",
                     "data_type": "string",
-                    "column_name": "load balancing mode",
+                    "column_name": "Load Balancing Mode",
                     "column_order": 2,
                     "example_values": [
                         "round-robin"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.allowNat",
-                    "data_type": "string",
-                    "example_values": [
-                        "yes"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.queueDepthLimit",
-                    "data_type": "numeric",
-                    "example_values": [
-                        0
                     ]
                 },
                 {
@@ -2384,24 +2404,17 @@
                     ]
                 },
                 {
-                    "data_path": "action_result.data.*.minUpMembers",
+                    "data_path": "action_result.data.*.minActiveMembers",
                     "data_type": "numeric",
                     "example_values": [
                         0
                     ]
                 },
                 {
-                    "data_path": "action_result.data.*.monitor",
-                    "data_type": "string",
-                    "example_values": [
-                        "/Common/http"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.slowRampTime",
+                    "data_path": "action_result.data.*.minUpMembers",
                     "data_type": "numeric",
                     "example_values": [
-                        10
+                        0
                     ]
                 },
                 {
@@ -2419,17 +2432,35 @@
                     ]
                 },
                 {
-                    "data_path": "action_result.data.*.queueTimeLimit",
-                    "data_type": "numeric",
+                    "data_path": "action_result.data.*.monitor",
+                    "data_type": "string",
                     "example_values": [
-                        0
+                        "/Common/http"
                     ]
                 },
                 {
-                    "data_path": "action_result.data.*.linkQosToServer",
+                    "data_path": "action_result.data.*.name",
+                    "data_type": "string",
+                    "column_name": "Pool Name",
+                    "column_order": 0,
+                    "example_values": [
+                        "pool1"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.partition",
+                    "column_name": "Partition",
+                    "column_order": 1,
                     "data_type": "string",
                     "example_values": [
-                        "pass-through"
+                        "Common"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.queueDepthLimit",
+                    "data_type": "numeric",
+                    "example_values": [
+                        0
                     ]
                 },
                 {
@@ -2440,42 +2471,10 @@
                     ]
                 },
                 {
-                    "data_path": "action_result.data.*.fullPath",
-                    "data_type": "string",
+                    "data_path": "action_result.data.*.queueTimeLimit",
+                    "data_type": "numeric",
                     "example_values": [
-                        "/Common/pool1"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.name",
-                    "data_type": "string",
-                    "column_name": "pool name",
-                    "column_order": 0,
-                    "example_values": [
-                        "pool1"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.partition",
-                    "column_name": "partition",
-                    "column_order": 1,
-                    "data_type": "string",
-                    "example_values": [
-                        "Common"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.allowSnat",
-                    "data_type": "string",
-                    "example_values": [
-                        "yes"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.ipTosToClient",
-                    "data_type": "string",
-                    "example_values": [
-                        "pass-through"
+                        0
                     ]
                 },
                 {
@@ -2486,10 +2485,14 @@
                     ]
                 },
                 {
-                    "data_path": "action_result.data.*.linkQosToClient",
+                    "data_path": "action_result.data.*.selfLink",
                     "data_type": "string",
                     "example_values": [
-                        "pass-through"
+                        "https://localhost/mgmt/tm/ltm/virtual?ver=15.0.0",
+                        "https://localhost/mgmt/tm/ltm/pool/~Common~pool1?ver=15.0.0"
+                    ],
+                    "contains": [
+                        "url"
                     ]
                 },
                 {
@@ -2500,10 +2503,10 @@
                     ]
                 },
                 {
-                    "data_path": "action_result.data.*.ignorePersistedWeight",
-                    "data_type": "string",
+                    "data_path": "action_result.data.*.slowRampTime",
+                    "data_type": "numeric",
                     "example_values": [
-                        "disabled"
+                        10
                     ]
                 },
                 {
@@ -2511,6 +2514,27 @@
                     "data_type": "numeric",
                     "example_values": [
                         2
+                    ]
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string",
+                    "example_values": [
+                        "Num pools: 2"
+                    ]
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
                     ]
                 }
             ],
@@ -2532,7 +2556,7 @@
                     "required": true,
                     "primary": true,
                     "contains": [
-                        "pool name"
+                        "f5 pool name"
                     ],
                     "order": 0
                 },
@@ -2540,7 +2564,10 @@
                     "description": "Name of the partition",
                     "data_type": "string",
                     "required": true,
-                    "primary": false,
+                    "primary": true,
+                    "contains": [
+                        "f5 partition name"
+                    ],
                     "order": 1
                 }
             },
@@ -2549,47 +2576,54 @@
                     "data_path": "action_result.status",
                     "data_type": "string",
                     "example_values": [
-                        "success"
+                        "success",
+                        "failed"
                     ]
                 },
                 {
-                    "data_path": "action_result.data.*.kind",
-                    "data_type": "string",
-                    "example_values": [
-                        "tm:ltm:pool:members:membersstate"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.ratio",
-                    "data_type": "numeric",
-                    "example_values": [
-                        1
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.name",
-                    "data_type": "string",
-                    "example_values": [
-                        "nginx1:80"
-                    ],
-                    "contains": [
-                        "f5 node name"
-                    ],
-                    "column_name": "member name",
-                    "column_order": 0
-                },
-                {
-                    "data_path": "action_result.data.*.generation",
-                    "data_type": "numeric",
-                    "example_values": [
-                        1
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.partition",
+                    "data_path": "action_result.parameter.partition_name",
                     "data_type": "string",
                     "example_values": [
                         "Common"
+                    ],
+                    "contains": [
+                        "f5 partition name"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.pool_name",
+                    "data_type": "string",
+                    "example_values": [
+                        "pool1"
+                    ],
+                    "contains": [
+                        "f5 pool name"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.address",
+                    "data_type": "string",
+                    "example_values": [
+                        "10.1.17.76"
+                    ],
+                    "contains": [
+                        "ip"
+                    ],
+                    "column_name": "Address",
+                    "column_order": 1
+                },
+                {
+                    "data_path": "action_result.data.*.connectionLimit",
+                    "data_type": "numeric",
+                    "example_values": [
+                        0
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.dynamicRatio",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
                     ]
                 },
                 {
@@ -2607,66 +2641,17 @@
                     ]
                 },
                 {
-                    "data_path": "action_result.data.*.state",
-                    "data_type": "string",
-                    "example_values": [
-                        "up"
-                    ],
-                    "column_name": "state",
-                    "column_order": 2
-                },
-                {
-                    "data_path": "action_result.data.*.session",
-                    "data_type": "string",
-                    "example_values": [
-                        "monitor-enabled"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.priorityGroup",
-                    "data_type": "numeric",
-                    "example_values": [
-                        0
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.logging",
-                    "data_type": "string",
-                    "example_values": [
-                        "disabled"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.connectionLimit",
-                    "data_type": "numeric",
-                    "example_values": [
-                        0
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.address",
-                    "data_type": "string",
-                    "example_values": [
-                        "10.1.17.76"
-                    ],
-                    "contains": [
-                        "ip"
-                    ],
-                    "column_name": "address",
-                    "column_order": 1
-                },
-                {
-                    "data_path": "action_result.data.*.dynamicRatio",
-                    "data_type": "numeric",
-                    "example_values": [
-                        1
-                    ]
-                },
-                {
                     "data_path": "action_result.data.*.fullPath",
                     "data_type": "string",
                     "example_values": [
-                        "/Common/nginx1:80"
+                        "/Common/test1:80"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.generation",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
                     ]
                 },
                 {
@@ -2677,10 +2662,64 @@
                     ]
                 },
                 {
+                    "data_path": "action_result.data.*.kind",
+                    "data_type": "string",
+                    "example_values": [
+                        "tm:ltm:pool:members:membersstate"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.logging",
+                    "data_type": "string",
+                    "example_values": [
+                        "disabled"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.monitor",
+                    "data_type": "string",
+                    "example_values": [
+                        "default"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.name",
+                    "data_type": "string",
+                    "example_values": [
+                        "nginx1:80"
+                    ],
+                    "contains": [
+                        "f5 node name"
+                    ],
+                    "column_name": "Member Name",
+                    "column_order": 0
+                },
+                {
+                    "data_path": "action_result.data.*.partition",
+                    "data_type": "string",
+                    "example_values": [
+                        "Common"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.priorityGroup",
+                    "data_type": "numeric",
+                    "example_values": [
+                        0
+                    ]
+                },
+                {
                     "data_path": "action_result.data.*.rateLimit",
                     "data_type": "string",
                     "example_values": [
                         "disabled"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.ratio",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
                     ]
                 },
                 {
@@ -2694,34 +2733,26 @@
                     ]
                 },
                 {
-                    "data_path": "action_result.data.*.monitor",
+                    "data_path": "action_result.data.*.session",
                     "data_type": "string",
                     "example_values": [
-                        "default"
+                        "monitor-enabled"
                     ]
                 },
                 {
-                    "data_path": "action_result.message",
+                    "data_path": "action_result.data.*.state",
                     "data_type": "string",
                     "example_values": [
-                        "Successfully listed pool members"
-                    ]
-                },
-                {
-                    "data_path": "action_result.parameter.pool_name",
-                    "data_type": "string",
-                    "example_values": [
-                        "pool1"
+                        "up"
                     ],
-                    "contains": [
-                        "pool name"
-                    ]
+                    "column_name": "State",
+                    "column_order": 2
                 },
                 {
-                    "data_path": "action_result.parameter.partition_name",
+                    "data_path": "action_result.summary.members",
                     "data_type": "string",
                     "example_values": [
-                        "Common"
+                        "test1:80,test2:80,test3:80,test10:80"
                     ]
                 },
                 {
@@ -2732,10 +2763,10 @@
                     ]
                 },
                 {
-                    "data_path": "action_result.summary.members",
+                    "data_path": "action_result.message",
                     "data_type": "string",
                     "example_values": [
-                        "nginx1:80,nginx2:80,nginx3:80,test10:80"
+                        "Successfully listed pool members"
                     ]
                 },
                 {
