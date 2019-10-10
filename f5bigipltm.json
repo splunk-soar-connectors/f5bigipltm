@@ -1587,6 +1587,10 @@
                     "description": "Name of the node to describe",
                     "data_type": "string",
                     "required": true,
+                    "primary": true,
+                    "contains": [
+                        "f5 node name"
+                    ],
                     "order": 0
                 }
             },
