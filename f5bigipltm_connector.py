@@ -435,6 +435,37 @@ class F5BigipLtmConnector(BaseConnector):
 
         return action_result.set_status(phantom.APP_SUCCESS, "Successfully listed pool members")
 
+    def _handle_get_node_stats(self, param):
+
+        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
+
+        action_result = self.add_action_result(ActionResult(dict(param)))
+
+        node_name = param['node_name']
+
+        # make rest call
+        ret_val, response = self._make_rest_call('/mgmt/tm/ltm/node/{0}/stats'.format(node_name), action_result)
+
+        if phantom.is_fail(ret_val):
+            return action_result.get_status()
+
+        try:
+            first_entries_key = next(iter(response['entries']))
+            stats = response['entries'][first_entries_key]['nestedStats']['entries']
+        except Exception as e:
+            message = "Unexpected API response. Error: {}".format(e)
+            return action_result.set_status(phantom.APP_ERROR, message)
+
+        # replace . with _ for first level keys, since . cannot be a part of key
+        stats = {k.replace('.', '_'): v for k, v in stats.items()}
+
+        action_result.add_data(stats)
+
+        summary = action_result.update_summary({})
+        summary['num_connections'] = stats['serverside_curConns']['value']
+
+        return action_result.set_status(phantom.APP_SUCCESS, "Successfully retrieved node stats")
+
     def handle_action(self, param):
 
         ret_val = phantom.APP_SUCCESS
@@ -479,6 +510,9 @@ class F5BigipLtmConnector(BaseConnector):
 
         elif action_id == 'list_members':
             ret_val = self._handle_list_members(param)
+
+        elif action_id == 'get_node_stats':
+            ret_val = self._handle_get_node_stats(param)
 
         return ret_val
 
