@@ -10,11 +10,11 @@
     "product_version_regex": ".*",
     "publisher": "Splunk",
     "license": "Copyright (c) 2019 Splunk Inc.",
-    "app_version": "1.0.1",
-    "utctime_updated": "2019-10-14T20:22:53.000000Z",
+    "app_version": "1.1.0",
+    "utctime_updated": "2019-10-14T20:54:39.000000Z",
     "package_name": "phantom_f5bigipltm",
     "main_module": "f5bigipltm_connector.pyc",
-    "min_phantom_version": "4.2.7532",
+    "min_phantom_version": "4.5.15922",
     "app_wizard_version": "1.0.0",
     "configuration": {
         "base_url": {
@@ -1784,6 +1784,200 @@
                     "data_type": "numeric",
                     "example_values": [
                         1
+                    ]
+                }
+            ],
+            "render": {
+                "type": "table"
+            },
+            "versions": "EQ(*)"
+        },
+        {
+            "action": "get node stats",
+            "identifier": "get_node_stats",
+            "description": "Get stats of the node",
+            "type": "investigate",
+            "read_only": true,
+            "parameters": {
+                "node_name": {
+                    "description": "Name of the node",
+                    "data_type": "string",
+                    "required": true,
+                    "primary": true,
+                    "contains": [
+                        "f5 node name"
+                    ],
+                    "order": 0
+                }
+            },
+            "output": [
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "column_name": "Status",
+                    "column_order": 1,
+                    "example_values": [
+                        "success",
+                        "failed"
+                    ]
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string",
+                    "example_values": [
+                        "Successfully retrieved node stats"
+                    ]
+                },
+                {
+                    "data_path": "action_result.summary.num_connections",
+                    "data_type": "numeric",
+                    "example_values": [
+                        4
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.node_name",
+                    "data_type": "string",
+                    "column_name": "Node Name",
+                    "column_order": 0,
+                    "example_values": [
+                        "test8"
+                    ],
+                    "contains": [
+                        "f5 node name"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.serverside_bitsOut.value",
+                    "data_type": "numeric",
+                    "example_values": [
+                        0
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.status_availabilityState.description",
+                    "data_type": "string",
+                    "example_values": [
+                        "unknown"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.serverside_maxConns.value",
+                    "data_type": "numeric",
+                    "example_values": [
+                        100
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.monitorStatus.description",
+                    "data_type": "string",
+                    "example_values": [
+                        "unchecked"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.serverside_curConns.value",
+                    "data_type": "numeric",
+                    "example_values": [
+                        0
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.monitorRule.description",
+                    "data_type": "string",
+                    "example_values": [
+                        "none"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.serverside_pktsOut.value",
+                    "data_type": "numeric",
+                    "example_values": [
+                        0
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.tmName.description",
+                    "data_type": "string",
+                    "example_values": [
+                        "/Common/IIS1"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.totRequests.value",
+                    "data_type": "numeric",
+                    "example_values": [
+                        0
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.status_enabledState.description",
+                    "data_type": "string",
+                    "example_values": [
+                        "enabled"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.serverside_pktsIn.value",
+                    "data_type": "numeric",
+                    "example_values": [
+                        0
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.serverside_totConns.value",
+                    "data_type": "numeric",
+                    "example_values": [
+                        0
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.serverside_bitsIn.value",
+                    "data_type": "numeric",
+                    "example_values": [
+                        0
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.addr.description",
+                    "data_type": "string",
+                    "example_values": [
+                        "1.1.1.1"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.status_statusReason.description",
+                    "data_type": "string",
+                    "example_values": [
+                        "Node address does not have service checking enabled"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.curSessions.value",
+                    "data_type": "numeric",
+                    "example_values": [
+                        0
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.sessionStatus.description",
+                    "data_type": "string",
+                    "example_values": [
+                        "enabled"
                     ]
                 }
             ],
