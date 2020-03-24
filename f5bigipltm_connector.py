@@ -1,6 +1,6 @@
 # File: f5bigipltm_connector.py
 #
-# Copyright (c) 2019 Splunk Inc.
+# Copyright (c) 2019-2020 Splunk Inc.
 #
 # SPLUNK CONFIDENTIAL - Use or disclosure of this material in whole or in part
 # without a valid written license from Splunk Inc. is PROHIBITED.
@@ -13,7 +13,8 @@ from phantom.action_result import ActionResult
 # Usage of the consts file is recommended
 import requests
 import json
-from bs4 import BeautifulSoup
+import ipaddress
+from bs4 import BeautifulSoup, UnicodeDammit
 
 
 class RetVal(tuple):
@@ -34,7 +35,10 @@ class F5BigipLtmConnector(BaseConnector):
 
     def _process_empty_response(self, response, action_result):
 
-        if response.status_code == 200:
+        # The JSON Content-Type data can also come here if r.text is empty, hence,
+        # the exposed range for valid success scenarios in the response
+        # processing of JSON also should be considered here.
+        if 200 <= response.status_code < 399:
             return RetVal(phantom.APP_SUCCESS, {})
 
         return RetVal(action_result.set_status(phantom.APP_ERROR, "Empty response and no information in the header"), None)
@@ -77,8 +81,12 @@ class F5BigipLtmConnector(BaseConnector):
 
         try:
             if resp_json and (resp_json.get("code") or resp_json.get("message")):
+                if resp_json.get("message"):
+                    error_message = UnicodeDammit(resp_json.get("message")).unicode_markup.encode('UTF-8')
+                else:
+                    error_message = "Unknown error occured"
                 message = "Error occurred while making the request. Status Code: {0}. Response Code: {1}. Message from server: {2}".format(
-                                                                                                                    r.status_code, resp_json.get("code"), resp_json.get("message"))
+                                                                                                                    r.status_code, resp_json.get("code"), error_message)
             else:
                 # You should process the error returned in the json
                 message = "Error from server. Status Code: {0} Data from server: {1}".format(
@@ -101,6 +109,7 @@ class F5BigipLtmConnector(BaseConnector):
         # Process a json response
         if 'json' in r.headers.get('Content-Type', ''):
             if not r.text:
+                self.debug_print("Processing the JSON Content-Type response with 'process_empty_response' due to empty 'r.text' value")
                 return self._process_empty_response(r, action_result)
             else:
                 return self._process_json_response(r, action_result)
@@ -135,9 +144,19 @@ class F5BigipLtmConnector(BaseConnector):
 
         # Create a URL to connect to
         try:
-            url = self._base_url + endpoint
+            url = "{}{}".format(UnicodeDammit(self._base_url).unicode_markup.encode('utf-8'), endpoint)
         except Exception as e:
-            return RetVal(action_result.set_status(phantom.APP_ERROR, "Please check the asset configuration and action parameters. Error: {0}".format(str(e))), None)
+            if e.message:
+                if isinstance(e.message, basestring):
+                    error_msg = UnicodeDammit(e.message).unicode_markup.encode('UTF-8')
+                else:
+                    try:
+                        error_msg = UnicodeDammit(e.message).unicode_markup.encode('utf-8')
+                    except:
+                        error_msg = "Unknown error occurred. Please check the asset configuration and|or the action parameters."
+            else:
+                error_msg = "Unknown error occurred. Please check the asset configuration and|or the action parameters."
+            return RetVal(action_result.set_status(phantom.APP_ERROR, "Please check the asset configuration and action parameters. Error: {0}".format(error_msg)), None)
 
         try:
             r = request_func(
@@ -146,7 +165,19 @@ class F5BigipLtmConnector(BaseConnector):
                             verify=config.get('verify_server_cert', False),
                             **kwargs)
         except Exception as e:
-            return RetVal(action_result.set_status( phantom.APP_ERROR, "Error Connecting to server. Details: {0}".format(str(e))), resp_json)
+            if e.message:
+                if isinstance(e.message, basestring):
+                    error_msg = UnicodeDammit(e.message).unicode_markup.encode('utf-8')
+                else:
+                    try:
+                        error_msg = UnicodeDammit(e.message).unicode_markup.encode('utf-8')
+                    except:
+                        error_msg = "Unknown error occurred. Please check the asset configuration and|or the action parameters."
+            else:
+                error_msg = "Unknown error occurred. Please check the asset configuration and|or the action parameters."
+
+            return RetVal(action_result.set_status(phantom.APP_ERROR, "Error Connecting to server. Details: {0}"
+                                                   .format(error_msg)), resp_json)
 
         return self._process_response(r, action_result)
 
@@ -174,9 +205,19 @@ class F5BigipLtmConnector(BaseConnector):
 
         action_result = self.add_action_result(ActionResult(dict(param)))
 
-        pool_name = param['pool_name']
-        node_name = param['node_name']
+        pool_name = UnicodeDammit(param['pool_name']).unicode_markup.encode('utf-8')
+        node_name = UnicodeDammit(param['node_name']).unicode_markup.encode('utf-8')
         port = param['port']
+
+        try:
+            int(port)
+        except ValueError:
+            return action_result.set_status(phantom.APP_ERROR, "Please enter a valid integer in 'port' parameter")
+        except Exception as e:
+            return action_result.set_status(phantom.APP_ERROR, "Please enter a valid integer in 'port' parameter. Error: {}".format(str(e)))
+
+        if not 0 <= int(port) <= 65535:
+            return action_result.set_status(phantom.APP_ERROR, "Please enter the port in range of 0 to 65535")
 
         # make rest call
         ret_val, response = self._make_rest_call('/mgmt/tm/ltm/pool/{0}/members/{1}:{2}'.format(pool_name, node_name, port), action_result, method="delete")
@@ -198,16 +239,26 @@ class F5BigipLtmConnector(BaseConnector):
         self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
 
         action_result = self.add_action_result(ActionResult(dict(param)))
-
-        node_name = param['node_name']
+        node_name = UnicodeDammit(param['node_name']).unicode_markup.encode('utf-8').replace('\\', '\\\\').replace('"', '\\"')
         port = param['port']
-        partition_name = param['partition_name']
-        pool_name = param['pool_name']
+        partition_name = UnicodeDammit(param['partition_name']).unicode_markup.encode('utf-8').replace('\\', '\\\\').replace('"', '\\"')
+        pool_name = UnicodeDammit(param['pool_name']).unicode_markup.encode('utf-8').replace('\\', '\\\\').replace('"', '\\"')
+
+        try:
+            int(port)
+        except ValueError:
+            return action_result.set_status(phantom.APP_ERROR, "Please enter a valid integer in 'port' parameter")
+        except Exception as e:
+            return action_result.set_status(phantom.APP_ERROR, "Please enter a valid integer in 'port' parameter. Error: {}".format(str(e)))
+
+        if not 0 <= int(port) <= 65535:
+            return action_result.set_status(phantom.APP_ERROR, "Please enter the port in range of 0 to 65535")
+
+        json_str = '{{"name": "/{0}/{1}:{2}"}}'.format(partition_name, node_name, port)
 
         # make rest call
-        ret_val, response = self._make_rest_call(
-            '/mgmt/tm/ltm/pool/{0}/members'.format(pool_name),
-            action_result, method="post", json={"name": "/{0}/{1}:{2}".format(partition_name, node_name, port)})
+        ret_val, response = self._make_rest_call('/mgmt/tm/ltm/pool/{0}/members'.format(pool_name),
+                                                     action_result, method="post", data=json_str)
 
         if (phantom.is_fail(ret_val)):
             return action_result.get_status()
@@ -215,11 +266,59 @@ class F5BigipLtmConnector(BaseConnector):
         action_result.add_data(response)
 
         summary = action_result.update_summary({})
-        summary['node_name'] = response['name']
+        summary['node_name'] = response.get('name')
         summary['port'] = port
         summary['pool_name'] = pool_name
 
         return action_result.set_status(phantom.APP_SUCCESS, "Node successfully added to pool")
+
+    def _is_ip(self, input_ip_address):
+        """ Function that checks given address and return True if address is valid IPv4 or IPV6 address.
+
+        :param input_ip_address: IP address
+        :return: status (success/failure)
+        """
+
+        ip_address_input = UnicodeDammit(input_ip_address).unicode_markup.encode('UTF-8').decode('UTF-8')
+
+        try:
+            try:
+                ipaddress.ip_address(ip_address_input)
+            except:
+                return False
+        except:
+            return False
+
+        return True
+
+    def _paginator(self, endpoint, action_result, payload=None, limit=None):
+
+        items_list = list()
+        f5_default_limit = 100
+
+        if not payload:
+            payload = dict()
+
+        payload['$skip'] = 0
+        payload['$top'] = f5_default_limit
+
+        while True:
+            ret_val, items = self._make_rest_call(endpoint, action_result, params=payload)
+
+            if phantom.is_fail(ret_val) or items.get("items") is None:
+                return None
+
+            items_list.extend(items.get("items"))
+
+            if limit and len(items_list) >= limit:
+                return items_list[:limit]
+
+            if len(items.get("items")) < f5_default_limit:
+                break
+
+            payload['$skip'] = payload['$skip'] + f5_default_limit
+
+        return items_list
 
     def _handle_create_node(self, param):
 
@@ -227,14 +326,14 @@ class F5BigipLtmConnector(BaseConnector):
 
         action_result = self.add_action_result(ActionResult(dict(param)))
 
-        node = param['node_name']
-        partition = param['partition_name']
+        node = UnicodeDammit(param['node_name']).unicode_markup.encode('utf-8').replace('\\', '\\\\').replace('"', '\\"')
+        partition = UnicodeDammit(param['partition_name']).unicode_markup.encode('utf-8').replace('\\', '\\\\').replace('"', '\\"')
         address = param['ip_address']
 
+        json_str = '{{"name": "{}", "partition": "{}", "address": "{}"}}'.format(node, partition, address)
+
         # make rest call
-        ret_val, response = self._make_rest_call('/mgmt/tm/ltm/node',
-        action_result, method="post", json={"name": node, "partition":
-        partition, "address": address})
+        ret_val, response = self._make_rest_call('/mgmt/tm/ltm/node', action_result, method="post", data=json_str)
 
         if (phantom.is_fail(ret_val)):
             return action_result.get_status()
@@ -242,7 +341,7 @@ class F5BigipLtmConnector(BaseConnector):
         action_result.add_data(response)
 
         summary = action_result.update_summary({})
-        summary['node_name'] = response['name']
+        summary['node_name'] = response.get('name')
 
         return action_result.set_status(phantom.APP_SUCCESS, "Node successfully created")
 
@@ -251,8 +350,7 @@ class F5BigipLtmConnector(BaseConnector):
 
         action_result = self.add_action_result(ActionResult(dict(param)))
 
-        node_name = param['node_name']
-
+        node_name = UnicodeDammit(param['node_name']).unicode_markup.encode('utf-8')
         # make rest call
         ret_val, response = self._make_rest_call('/mgmt/tm/ltm/node/{0}'.format(node_name), action_result, method="delete")
 
@@ -272,7 +370,7 @@ class F5BigipLtmConnector(BaseConnector):
 
         action_result = self.add_action_result(ActionResult(dict(param)))
 
-        node_name = param['node_name']
+        node_name = UnicodeDammit(param['node_name']).unicode_markup.encode('utf-8')
         param['session'] = 'user-disabled'
 
         # make rest call
@@ -295,7 +393,7 @@ class F5BigipLtmConnector(BaseConnector):
 
         action_result = self.add_action_result(ActionResult(dict(param)))
 
-        node_name = param['node_name']
+        node_name = UnicodeDammit(param['node_name']).unicode_markup.encode('utf-8')
         param['session'] = 'user-enabled'
 
         # make rest call
@@ -318,7 +416,7 @@ class F5BigipLtmConnector(BaseConnector):
 
         action_result = self.add_action_result(ActionResult(dict(param)))
 
-        node_name = param['node_name']
+        node_name = UnicodeDammit(param['node_name']).unicode_markup.encode('utf-8')
 
         # make rest call
         ret_val, response = self._make_rest_call('/mgmt/tm/ltm/node/{0}'.format(node_name), action_result)
@@ -329,7 +427,7 @@ class F5BigipLtmConnector(BaseConnector):
         action_result.add_data(response)
 
         summary = action_result.update_summary({})
-        summary['state'] = response['state']
+        summary['state'] = response.get('state')
 
         return action_result.set_status(phantom.APP_SUCCESS)
 
@@ -339,21 +437,29 @@ class F5BigipLtmConnector(BaseConnector):
 
         action_result = self.add_action_result(ActionResult(dict(param)))
 
-        # make rest call
-        ret_val, response = self._make_rest_call('/mgmt/tm/ltm/node', action_result)
+        max_results = param.get("max_results")
 
-        if (phantom.is_fail(ret_val)):
+        try:
+            if max_results is not None and int(max_results) <= 0:
+                return action_result.set_status(phantom.APP_ERROR, "Please provide a non-zero positive integer in 'max results' parameter")
+        except:
+            return action_result.set_status(phantom.APP_ERROR, "Please provide a non-zero positive integer in 'max results' parameter")
+
+        response = self._paginator('/mgmt/tm/ltm/node', action_result, limit=max_results)
+
+        if response is None:
             return action_result.get_status()
 
         node_names = []
 
-        for item in response['items']:
+        for item in response:
             action_result.add_data(item)
             if 'name' in item:
                 node_names.append(item['name'])
 
         summary = action_result.update_summary({})
         summary['num_nodes'] = len(action_result.get_data())
+        summary['node_names'] = ','.join(node_names)
 
         return action_result.set_status(phantom.APP_SUCCESS)
 
@@ -363,13 +469,20 @@ class F5BigipLtmConnector(BaseConnector):
 
         action_result = self.add_action_result(ActionResult(dict(param)))
 
-        # make rest call
-        ret_val, response = self._make_rest_call('/mgmt/tm/ltm/pool', action_result)
+        max_results = param.get("max_results")
 
-        if (phantom.is_fail(ret_val)):
+        try:
+            if max_results is not None and int(max_results) <= 0:
+                return action_result.set_status(phantom.APP_ERROR, "Please provide a non-zero positive integer in 'max results' parameter")
+        except:
+            return action_result.set_status(phantom.APP_ERROR, "Please provide a non-zero positive integer in 'max results' parameter")
+
+        response = self._paginator('/mgmt/tm/ltm/pool', action_result, limit=max_results)
+
+        if response is None:
             return action_result.get_status()
 
-        for item in response['items']:
+        for item in response:
             action_result.add_data(item)
 
         summary = action_result.update_summary({})
@@ -383,21 +496,22 @@ class F5BigipLtmConnector(BaseConnector):
 
         action_result = self.add_action_result(ActionResult(dict(param)))
 
-        pool_name = param['pool_name']
-        partition_name = param['partition_name']
-
+        pool_name = UnicodeDammit(param['pool_name']).unicode_markup.encode('utf-8').replace('\\', '\\\\').replace('"', '\\"')
+        partition_name = UnicodeDammit(param['partition_name']).unicode_markup.encode('utf-8').replace('\\', '\\\\').replace('"', '\\"')
         pool_description = param.get('pool_description')
 
-        payload = { 'name': pool_name, 'partition': partition_name }
         if pool_description:
-            payload['pool_description'] = pool_description
-
+            # The F5 server requires the below replacement for some special characters as mentioned below.
+            # " --> \\\" which gets represented as \\\\\\\" in the Python string
+            # \ --> \\\\ which gets represented as \\\\\\\\ in the Python string
+            pool_description = UnicodeDammit(param.get('pool_description')).unicode_markup.encode('utf-8').replace("\\", "\\\\\\\\").replace('"', '\\\\\\"')
+            json_str = '{{"name": "{0}", "partition": "{1}", "description": "{2}"}}'.format(pool_name, partition_name, pool_description)
+        else:
+            json_str = '{{"name": "{0}", "partition": "{1}"}}'.format(pool_name, partition_name)
         # make rest call
-        ret_val, response = self._make_rest_call('/mgmt/tm/ltm/pool', action_result, method="post", json=payload)
-
+        ret_val, response = self._make_rest_call('/mgmt/tm/ltm/pool', action_result, method="post", data=json_str)
         if (phantom.is_fail(ret_val)):
             return action_result.get_status()
-
         action_result.add_data(response)
 
         summary = action_result.update_summary({})
@@ -413,27 +527,33 @@ class F5BigipLtmConnector(BaseConnector):
 
         action_result = self.add_action_result(ActionResult(dict(param)))
 
-        pool_name = param['pool_name']
-        partition_name = param['partition_name']
+        pool_name = UnicodeDammit(param['pool_name']).unicode_markup.encode('utf-8')
+        partition_name = UnicodeDammit(param['partition_name']).unicode_markup.encode('utf-8')
+        max_results = param.get("max_results")
 
-        # make rest call
-        ret_val, response = self._make_rest_call('/mgmt/tm/ltm/pool/~{0}~{1}/members'.format(partition_name, pool_name), action_result)
+        try:
+            if max_results is not None and int(max_results) <= 0:
+                return action_result.set_status(phantom.APP_ERROR, "Please provide a non-zero positive integer in 'max results' parameter")
+        except:
+            return action_result.set_status(phantom.APP_ERROR, "Please provide a non-zero positive integer in 'max results' parameter")
 
-        if (phantom.is_fail(ret_val)):
+        response = self._paginator('/mgmt/tm/ltm/pool/~{0}~{1}/members'.format(partition_name, pool_name), action_result, limit=max_results)
+
+        if response is None:
             return action_result.get_status()
 
         members = []
 
-        for item in response['items']:
+        for item in response:
             action_result.add_data(item)
             if 'name' in item:
                 members.append(item['name'])
 
         summary = action_result.update_summary({})
         summary['num_members'] = len(action_result.get_data())
-        summary['members'] = ','.join(members)
+        summary['members'] = ', '.join(members)
 
-        return action_result.set_status(phantom.APP_SUCCESS, "Successfully listed pool members")
+        return action_result.set_status(phantom.APP_SUCCESS)
 
     def _handle_get_node_stats(self, param):
 
@@ -441,7 +561,7 @@ class F5BigipLtmConnector(BaseConnector):
 
         action_result = self.add_action_result(ActionResult(dict(param)))
 
-        node_name = param['node_name']
+        node_name = UnicodeDammit(param['node_name']).unicode_markup.encode('utf-8')
 
         # make rest call
         ret_val, response = self._make_rest_call('/mgmt/tm/ltm/node/{0}/stats'.format(node_name), action_result)
@@ -525,6 +645,8 @@ class F5BigipLtmConnector(BaseConnector):
 
         self._base_url = config['base_url']
         self._auth = (config['username'], config['password'])
+
+        self.set_validator('ipv6', self._is_ip)
 
         return phantom.APP_SUCCESS
 
