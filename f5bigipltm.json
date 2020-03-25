@@ -2275,6 +2275,13 @@
                     "column_order": 6
                 },
                 {
+                    "data_path": "action_result.summary.node_names",
+                    "data_type": "string",
+                    "example_values": [
+                        "10.1.17.97, 10.1.17.98, a13"
+                    ]
+                },
+                {
                     "data_path": "action_result.summary.num_nodes",
                     "data_type": "numeric",
                     "example_values": [
@@ -2285,7 +2292,7 @@
                     "data_path": "action_result.message",
                     "data_type": "string",
                     "example_values": [
-                        "Num nodes: 4"
+                        "Node names: 10.1.17.97, 10.1.17.98, a13, Num nodes: 3"
                     ]
                 },
                 {
@@ -2933,6 +2940,13 @@
                     ]
                 },
                 {
+                    "data_path": "action_result.parameter.max_results",
+                    "data_type": "numeric",
+                    "example_values": [
+                        10
+                    ]
+                },
+                {
                     "data_path": "action_result.parameter.partition_name",
                     "data_type": "string",
                     "example_values": [
@@ -2950,13 +2964,6 @@
                     ],
                     "contains": [
                         "f5 pool name"
-                    ]
-                },
-                {
-                    "data_path": "action_result.parameter.max_results",
-                    "data_type": "numeric",
-                    "example_values": [
-                        10
                     ]
                 },
                 {
@@ -3116,7 +3123,7 @@
                     "data_path": "action_result.summary.members",
                     "data_type": "string",
                     "example_values": [
-                        "test1:80,test2:80,test3:80,test10:80"
+                        "10.1.17.97:8080, 10.1.17.98:8080, a13:8080"
                     ]
                 },
                 {
@@ -3130,7 +3137,7 @@
                     "data_path": "action_result.message",
                     "data_type": "string",
                     "example_values": [
-                        "Successfully listed pool members"
+                        "Num members: 3, Members: 10.1.17.97:8080, 10.1.17.98:8080, a13:8080"
                     ]
                 },
                 {

@@ -459,7 +459,7 @@ class F5BigipLtmConnector(BaseConnector):
 
         summary = action_result.update_summary({})
         summary['num_nodes'] = len(action_result.get_data())
-        summary['node_names'] = ','.join(node_names)
+        summary['node_names'] = ', '.join(node_names)
 
         return action_result.set_status(phantom.APP_SUCCESS)
 
