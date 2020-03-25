@@ -92,7 +92,18 @@ class F5BigipLtmConnector(BaseConnector):
                 message = "Error from server. Status Code: {0} Data from server: {1}".format(
                         r.status_code, r.text.encode('utf-8').replace(u'{', '{{').replace(u'}', '}}'))
         except Exception as e:
-            message = "Unknown error occurred while processing the output response from the server. Status Code: {0}. Data from server: {1}".format(r.status_code, str(e))
+            if e.message:
+                if isinstance(e.message, basestring):
+                    error_msg = UnicodeDammit(e.message).unicode_markup.encode('UTF-8')
+                else:
+                    try:
+                        error_msg = UnicodeDammit(e.message).unicode_markup.encode('utf-8')
+                    except:
+                        error_msg = "Unknown error occurred while parsing JSON response. Please check the asset configuration and|or the action parameters."
+            else:
+                error_msg = "Unknown error occurred while parsing JSON response. Please check the asset configuration and|or the action parameters."
+
+            message = "Unknown error occurred while processing the output response from the server. Status Code: {0}. Data from server: {1}".format(r.status_code, error_msg)
 
         return RetVal(action_result.set_status(phantom.APP_ERROR, message), None)
 
@@ -211,10 +222,8 @@ class F5BigipLtmConnector(BaseConnector):
 
         try:
             int(port)
-        except ValueError:
+        except:
             return action_result.set_status(phantom.APP_ERROR, "Please enter a valid integer in 'port' parameter")
-        except Exception as e:
-            return action_result.set_status(phantom.APP_ERROR, "Please enter a valid integer in 'port' parameter. Error: {}".format(str(e)))
 
         if not 0 <= int(port) <= 65535:
             return action_result.set_status(phantom.APP_ERROR, "Please enter the port in range of 0 to 65535")
@@ -246,10 +255,8 @@ class F5BigipLtmConnector(BaseConnector):
 
         try:
             int(port)
-        except ValueError:
+        except:
             return action_result.set_status(phantom.APP_ERROR, "Please enter a valid integer in 'port' parameter")
-        except Exception as e:
-            return action_result.set_status(phantom.APP_ERROR, "Please enter a valid integer in 'port' parameter. Error: {}".format(str(e)))
 
         if not 0 <= int(port) <= 65535:
             return action_result.set_status(phantom.APP_ERROR, "Please enter the port in range of 0 to 65535")
