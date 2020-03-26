@@ -10,12 +10,16 @@
     "product_version_regex": ".*",
     "publisher": "Splunk",
     "license": "Copyright (c) 2019-2020 Splunk Inc.",
-    "app_version": "1.1.1",
+    "app_version": "2.0.0",
+    "python_version": "3",
     "utctime_updated": "2019-12-06T18:24:30.000000Z",
     "package_name": "phantom_f5bigipltm",
-    "main_module": "f5bigipltm_connector.pyc",
+    "main_module": "f5bigipltm_connector.py",
     "min_phantom_version": "4.6.19142",
     "app_wizard_version": "1.0.0",
+    "latest_tested_version": [
+        ""
+    ],
     "configuration": {
         "base_url": {
             "description": "Base URL of F5 BIG-IP LTM instance (e.g. https://10.1.16.110)",
@@ -56,7 +60,7 @@
         {
             "action": "create node",
             "identifier": "create_node",
-            "description": "Creates a new node",
+            "description": "Create a new node",
             "type": "generic",
             "read_only": false,
             "parameters": {
@@ -332,7 +336,7 @@
         {
             "action": "delete node",
             "identifier": "delete_node",
-            "description": "Deletes a node",
+            "description": "Delete a node",
             "type": "generic",
             "read_only": false,
             "parameters": {
@@ -411,7 +415,7 @@
         {
             "action": "remove node",
             "identifier": "remove_node",
-            "description": "Removes a node from a pool",
+            "description": "Remove a node from a pool",
             "type": "generic",
             "read_only": false,
             "parameters": {
@@ -558,7 +562,7 @@
         {
             "action": "create pool",
             "identifier": "create_pool",
-            "description": "Creates a new pool",
+            "description": "Create a new pool",
             "type": "generic",
             "read_only": false,
             "parameters": {
@@ -882,7 +886,7 @@
         {
             "action": "add node",
             "identifier": "add_node",
-            "description": "Adds an existing node to a pool",
+            "description": "Add an existing node to a pool",
             "type": "generic",
             "read_only": false,
             "parameters": {
@@ -1198,7 +1202,7 @@
         {
             "action": "disable node",
             "identifier": "disable_node",
-            "description": "Disables a node",
+            "description": "Disable a node",
             "undo": "enable node",
             "type": "contain",
             "read_only": false,
@@ -1259,7 +1263,7 @@
                     "data_path": "action_result.data.*.description",
                     "data_type": "string",
                     "example_values": [
-                        "This node created for tetsing"
+                        "This node was created for testing"
                     ]
                 },
                 {
@@ -1429,7 +1433,7 @@
         {
             "action": "enable node",
             "identifier": "enable_node",
-            "description": "Enables a node",
+            "description": "Enable a node",
             "undo": "disable node",
             "type": "correct",
             "read_only": false,
@@ -1489,7 +1493,7 @@
                     "data_path": "action_result.data.*.description",
                     "data_type": "string",
                     "example_values": [
-                        "This node created for tetsing"
+                        "This node was created for testing"
                     ]
                 },
                 {
@@ -2075,7 +2079,7 @@
         {
             "action": "list nodes",
             "identifier": "list_nodes",
-            "description": "Fetches a list of nodes",
+            "description": "Fetch a list of nodes (if no value is provided, all nodes will be returned)",
             "type": "investigate",
             "read_only": true,
             "parameters": {
@@ -2318,7 +2322,7 @@
         {
             "action": "list pools",
             "identifier": "list_pools",
-            "description": "Fetches a list of configured pools",
+            "description": "Fetch a list of configured pools (if no value is provided, all pools will be returned)",
             "type": "investigate",
             "read_only": true,
             "parameters": {
@@ -2900,7 +2904,7 @@
         {
             "action": "list members",
             "identifier": "list_members",
-            "description": "fetches a list of configured node members of a pool",
+            "description": "Fetch a list of configured node members of a pool (if no value is provided, all node members of a pool will be returned)",
             "type": "investigate",
             "read_only": true,
             "parameters": {
