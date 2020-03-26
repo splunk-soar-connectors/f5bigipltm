@@ -2080,7 +2080,7 @@
             "read_only": true,
             "parameters": {
                 "max_results": {
-                    "description": "Max number of nodes to return",
+                    "description": "Max number of nodes to return (if no value is provided, all nodes will be returned)",
                     "data_type": "numeric",
                     "order": 0
                 }
