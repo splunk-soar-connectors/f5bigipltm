@@ -1489,7 +1489,7 @@
                     "data_path": "action_result.data.*.description",
                     "data_type": "string",
                     "example_values": [
-                        "This node created for tetsing"
+                        "This node was created for tetsing"
                     ]
                 },
                 {
