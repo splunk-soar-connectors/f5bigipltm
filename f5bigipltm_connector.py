@@ -187,11 +187,16 @@ class F5BigipLtmConnector(BaseConnector):
 
         return error_code, error_msg
 
-    def _make_rest_call(self, endpoint, action_result, method="get", **kwargs):
+    def _make_rest_call(self, endpoint, action_result, method="get", data=None, **kwargs):
 
         config = self.get_config()
 
         resp_json = None
+
+        # Handling for default 'latin-1' encoding in make_rest_call data=json_str
+        if data:
+            if self._python_version == 3:
+                data = data.encode('UTF-8')
 
         try:
             request_func = getattr(requests, method)
@@ -210,10 +215,12 @@ class F5BigipLtmConnector(BaseConnector):
                             url,
                             auth=self._auth,
                             verify=config.get('verify_server_cert', False),
+                            data=data,
                             **kwargs)
         except Exception as e:
             error_code, error_msg = self._get_error_message_from_exception(e)
-            return RetVal(action_result.set_status(phantom.APP_ERROR, "Error occurred while making the REST call to the F5 server. Error Code: {0}. Error Message: {1}".format(error_code, error_msg)), None)
+            return RetVal(action_result.set_status(phantom.APP_ERROR, "Error occurred while making the REST call to the F5 server. Error Code: {0}. Error Message: {1}".format(
+                            error_code, error_msg)), None)
 
         return self._process_response(r, action_result)
 
