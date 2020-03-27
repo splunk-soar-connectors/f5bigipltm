@@ -62,7 +62,7 @@ class F5BigipLtmConnector(BaseConnector):
             error_text = "Cannot parse error details"
 
         message = "Status Code: {0}. Data from server:\n{1}\n".format(status_code,
-                F5BigipLtmConnector._handle_py_ver_compat_for_input_str(self._python_version, error_text))
+                self._handle_py_ver_compat_for_input_str(self._python_version, error_text))
 
         try:
             message = message.replace(u'{', '{{').replace(u'}', '}}')
@@ -86,7 +86,7 @@ class F5BigipLtmConnector(BaseConnector):
         try:
             if resp_json and (resp_json.get("code") or resp_json.get("message")):
                 if resp_json.get("message"):
-                    error_msg = F5BigipLtmConnector._handle_py_ver_compat_for_input_str(self._python_version, resp_json.get("message"))
+                    error_msg = self._handle_py_ver_compat_for_input_str(self._python_version, resp_json.get("message"))
                 else:
                     error_msg = "Unable to find 'message' key in the JSON error response"
                 message = "Error occurred while making the request. Status Code: {0}. Response Code: {1}. Message from server: {2}".format(
@@ -98,7 +98,7 @@ class F5BigipLtmConnector(BaseConnector):
                 except:
                     error_msg = r.text.encode('utf-8').replace('{', '{{').replace('}', '}}')
 
-                error_msg = F5BigipLtmConnector._handle_py_ver_compat_for_input_str(self._python_version, error_msg)
+                error_msg = self._handle_py_ver_compat_for_input_str(self._python_version, error_msg)
                 message = "Error from server. Status Code: {0} Data from server: {1}".format(
                         r.status_code, error_msg)
         except Exception as e:
@@ -179,7 +179,7 @@ class F5BigipLtmConnector(BaseConnector):
             error_msg = "Unknown error occurred. Please check the asset configuration and|or action parameters."
 
         try:
-            error_msg = F5BigipLtmConnector._handle_py_ver_compat_for_input_str(self._python_version, error_msg)
+            error_msg = self._handle_py_ver_compat_for_input_str(self._python_version, error_msg)
         except TypeError:
             error_msg = "Error occurred while connecting to the F5 server. Please check the asset configuration and|or the action parameters."
         except:
@@ -248,8 +248,8 @@ class F5BigipLtmConnector(BaseConnector):
 
         action_result = self.add_action_result(ActionResult(dict(param)))
 
-        pool_name = F5BigipLtmConnector._handle_py_ver_compat_for_input_str(self._python_version, param['pool_name'])
-        node_name = F5BigipLtmConnector._handle_py_ver_compat_for_input_str(self._python_version, param['node_name'])
+        pool_name = self._handle_py_ver_compat_for_input_str(self._python_version, param['pool_name'])
+        node_name = self._handle_py_ver_compat_for_input_str(self._python_version, param['node_name'])
         port = param['port']
 
         try:
@@ -280,10 +280,10 @@ class F5BigipLtmConnector(BaseConnector):
         self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
 
         action_result = self.add_action_result(ActionResult(dict(param)))
-        node_name = F5BigipLtmConnector._handle_py_ver_compat_for_input_str(self._python_version, param['node_name']).replace('\\', '\\\\').replace('"', '\\"')
+        node_name = self._handle_py_ver_compat_for_input_str(self._python_version, param['node_name']).replace('\\', '\\\\').replace('"', '\\"')
         port = param['port']
-        partition_name = F5BigipLtmConnector._handle_py_ver_compat_for_input_str(self._python_version, param['partition_name']).replace('\\', '\\\\').replace('"', '\\"')
-        pool_name = F5BigipLtmConnector._handle_py_ver_compat_for_input_str(self._python_version, param['pool_name']).replace('\\', '\\\\').replace('"', '\\"')
+        partition_name = self._handle_py_ver_compat_for_input_str(self._python_version, param['partition_name']).replace('\\', '\\\\').replace('"', '\\"')
+        pool_name = self._handle_py_ver_compat_for_input_str(self._python_version, param['pool_name']).replace('\\', '\\\\').replace('"', '\\"')
 
         try:
             int(port)
@@ -362,8 +362,8 @@ class F5BigipLtmConnector(BaseConnector):
 
         action_result = self.add_action_result(ActionResult(dict(param)))
 
-        node = F5BigipLtmConnector._handle_py_ver_compat_for_input_str(self._python_version, param['node_name']).replace('\\', '\\\\').replace('"', '\\"')
-        partition = F5BigipLtmConnector._handle_py_ver_compat_for_input_str(self._python_version, param['partition_name']).replace('\\', '\\\\').replace('"', '\\"')
+        node = self._handle_py_ver_compat_for_input_str(self._python_version, param['node_name']).replace('\\', '\\\\').replace('"', '\\"')
+        partition = self._handle_py_ver_compat_for_input_str(self._python_version, param['partition_name']).replace('\\', '\\\\').replace('"', '\\"')
         address = param['ip_address']
 
         json_str = '{{"name": "{}", "partition": "{}", "address": "{}"}}'.format(node, partition, address)
@@ -386,7 +386,7 @@ class F5BigipLtmConnector(BaseConnector):
 
         action_result = self.add_action_result(ActionResult(dict(param)))
 
-        node_name = F5BigipLtmConnector._handle_py_ver_compat_for_input_str(self._python_version, param['node_name'])
+        node_name = self._handle_py_ver_compat_for_input_str(self._python_version, param['node_name'])
         # make rest call
         ret_val, response = self._make_rest_call('/mgmt/tm/ltm/node/{0}'.format(node_name), action_result, method="delete")
 
@@ -406,7 +406,7 @@ class F5BigipLtmConnector(BaseConnector):
 
         action_result = self.add_action_result(ActionResult(dict(param)))
 
-        node_name = F5BigipLtmConnector._handle_py_ver_compat_for_input_str(self._python_version, param['node_name'])
+        node_name = self._handle_py_ver_compat_for_input_str(self._python_version, param['node_name'])
         param['session'] = 'user-disabled'
 
         # make rest call
@@ -429,7 +429,7 @@ class F5BigipLtmConnector(BaseConnector):
 
         action_result = self.add_action_result(ActionResult(dict(param)))
 
-        node_name = F5BigipLtmConnector._handle_py_ver_compat_for_input_str(self._python_version, param['node_name'])
+        node_name = self._handle_py_ver_compat_for_input_str(self._python_version, param['node_name'])
         param['session'] = 'user-enabled'
 
         # make rest call
@@ -452,7 +452,7 @@ class F5BigipLtmConnector(BaseConnector):
 
         action_result = self.add_action_result(ActionResult(dict(param)))
 
-        node_name = F5BigipLtmConnector._handle_py_ver_compat_for_input_str(self._python_version, param['node_name'])
+        node_name = self._handle_py_ver_compat_for_input_str(self._python_version, param['node_name'])
 
         # make rest call
         ret_val, response = self._make_rest_call('/mgmt/tm/ltm/node/{0}'.format(node_name), action_result)
@@ -532,15 +532,15 @@ class F5BigipLtmConnector(BaseConnector):
 
         action_result = self.add_action_result(ActionResult(dict(param)))
 
-        pool_name = F5BigipLtmConnector._handle_py_ver_compat_for_input_str(self._python_version, param['pool_name']).replace('\\', '\\\\').replace('"', '\\"')
-        partition_name = F5BigipLtmConnector._handle_py_ver_compat_for_input_str(self._python_version, param['partition_name']).replace('\\', '\\\\').replace('"', '\\"')
+        pool_name = self._handle_py_ver_compat_for_input_str(self._python_version, param['pool_name']).replace('\\', '\\\\').replace('"', '\\"')
+        partition_name = self._handle_py_ver_compat_for_input_str(self._python_version, param['partition_name']).replace('\\', '\\\\').replace('"', '\\"')
         pool_description = param.get('pool_description')
 
         if pool_description:
             # The F5 server requires the below replacement for some special characters as mentioned below.
             # " --> \\\" which gets represented as \\\\\\\" in the Python string
             # \ --> \\\\ which gets represented as \\\\\\\\ in the Python string
-            pool_description = F5BigipLtmConnector._handle_py_ver_compat_for_input_str(self._python_version, param['pool_description']).replace("\\", "\\\\\\\\").replace(
+            pool_description = self._handle_py_ver_compat_for_input_str(self._python_version, param['pool_description']).replace("\\", "\\\\\\\\").replace(
                 '"', '\\\\\\"')
             json_str = '{{"name": "{0}", "partition": "{1}", "description": "{2}"}}'.format(pool_name, partition_name, pool_description)
         else:
@@ -564,8 +564,8 @@ class F5BigipLtmConnector(BaseConnector):
 
         action_result = self.add_action_result(ActionResult(dict(param)))
 
-        pool_name = F5BigipLtmConnector._handle_py_ver_compat_for_input_str(self._python_version, param['pool_name'])
-        partition_name = F5BigipLtmConnector._handle_py_ver_compat_for_input_str(self._python_version, param['partition_name'])
+        pool_name = self._handle_py_ver_compat_for_input_str(self._python_version, param['pool_name'])
+        partition_name = self._handle_py_ver_compat_for_input_str(self._python_version, param['partition_name'])
         max_results = param.get("max_results")
 
         try:
@@ -598,7 +598,7 @@ class F5BigipLtmConnector(BaseConnector):
 
         action_result = self.add_action_result(ActionResult(dict(param)))
 
-        node_name = F5BigipLtmConnector._handle_py_ver_compat_for_input_str(self._python_version, param['node_name'])
+        node_name = self._handle_py_ver_compat_for_input_str(self._python_version, param['node_name'])
 
         # make rest call
         ret_val, response = self._make_rest_call('/mgmt/tm/ltm/node/{0}/stats'.format(node_name), action_result)
@@ -686,7 +686,7 @@ class F5BigipLtmConnector(BaseConnector):
         except:
             return self.set_status(phantom.APP_ERROR, "Error occurred while getting the Phantom server's Python major version.")
 
-        self._base_url = F5BigipLtmConnector._handle_py_ver_compat_for_input_str(self._python_version, config['base_url'])
+        self._base_url = self._handle_py_ver_compat_for_input_str(self._python_version, config['base_url'])
         self._auth = (config['username'], config['password'])
 
         self.set_validator('ipv6', self._is_ip)
