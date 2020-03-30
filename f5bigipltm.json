@@ -17,7 +17,7 @@
     "main_module": "f5bigipltm_connector.py",
     "min_phantom_version": "4.6.19142",
     "app_wizard_version": "1.0.0",
-    "latest_tested_version": [
+    "latest_tested_versions": [
         "BIG-IP 15.0.0 Build 0.0.39 Final"
     ],
     "configuration": {
