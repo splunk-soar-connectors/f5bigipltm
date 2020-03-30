@@ -54,7 +54,10 @@ class F5BigipLtmConnector(BaseConnector):
 
         try:
             soup = BeautifulSoup(response.text, "html.parser")
-            error_text = soup.text
+            if soup.body and soup.body.text:
+                error_text = soup.body.text
+            else:
+                error_text = soup.text
             split_lines = error_text.split('\n')
             split_lines = [x.strip() for x in split_lines if x.strip()]
             error_text = '\n'.join(split_lines)
@@ -209,6 +212,10 @@ class F5BigipLtmConnector(BaseConnector):
         except Exception as e:
             error_code, error_msg = self._get_error_message_from_exception(e)
             return RetVal(action_result.set_status(phantom.APP_ERROR, "Unable to parse JSON response. Error Code: {0}. Error Message: {1}".format(error_code, error_msg)), None)
+
+        # To avoid UnicodeDecodeError in Phantom 4.8 python 2 version if any unicode character is present in URL
+        if self._python_version == 2:
+            url = url.decode('utf-8')
 
         try:
             r = request_func(
@@ -687,6 +694,10 @@ class F5BigipLtmConnector(BaseConnector):
             return self.set_status(phantom.APP_ERROR, "Error occurred while getting the Phantom server's Python major version.")
 
         self._base_url = self._handle_py_ver_compat_for_input_str(self._python_version, config['base_url'])
+
+        config['username'] = self._handle_py_ver_compat_for_input_str(self._python_version, config['username'])
+        config['password'] = self._handle_py_ver_compat_for_input_str(self._python_version, config['password'])
+
         self._auth = (config['username'], config['password'])
 
         self.set_validator('ipv6', self._is_ip)
