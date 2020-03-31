@@ -196,11 +196,6 @@ class F5BigipLtmConnector(BaseConnector):
 
         resp_json = None
 
-        # Handling for default 'latin-1' encoding in make_rest_call data=json_str
-        if data:
-            if self._python_version == 3:
-                data = data.encode('UTF-8')
-
         try:
             request_func = getattr(requests, method)
         except AttributeError:
@@ -213,10 +208,6 @@ class F5BigipLtmConnector(BaseConnector):
             error_code, error_msg = self._get_error_message_from_exception(e)
             return RetVal(action_result.set_status(phantom.APP_ERROR, "Error occurred while creating the REST URL for the API call. Error Code: {0}. Error Message: {1}".format(
                 error_code, error_msg)), None)
-
-        # To avoid UnicodeDecodeError in Phantom 4.8 python 2 version if any unicode character is present in URL
-        if self._python_version == 2:
-            url = url.decode('utf-8')
 
         try:
             r = request_func(
