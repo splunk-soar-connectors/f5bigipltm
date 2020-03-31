@@ -211,7 +211,7 @@ class F5BigipLtmConnector(BaseConnector):
             url = "{}{}".format(self._base_url, endpoint)
         except Exception as e:
             error_code, error_msg = self._get_error_message_from_exception(e)
-            return RetVal(action_result.set_status(phantom.APP_ERROR, "Unable to parse JSON response. Error Code: {0}. Error Message: {1}".format(error_code, error_msg)), None)
+            return RetVal(action_result.set_status(phantom.APP_ERROR, "Error occurred while creating the REST URL for the API call. Error Code: {0}. Error Message: {1}".format(error_code, error_msg)), None)
 
         # To avoid UnicodeDecodeError in Phantom 4.8 python 2 version if any unicode character is present in URL
         if self._python_version == 2:
