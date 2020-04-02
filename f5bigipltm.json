@@ -1,7 +1,7 @@
 {
     "appid": "081e852c-f1eb-4040-9244-79a8bd0ed140",
     "name": "F5 BIG-IP LTM",
-    "description": "This app integrates with an F5 BIG-IP LTM instance to manage pools and nodes",
+    "description": "This app implements investigate and generic actions to integrate with an F5 BIG-IP LTM instance to manage pools and nodes",
     "type": "network device",
     "product_vendor": "F5",
     "logo": "logo_f5bigipltm.svg",
@@ -9,13 +9,17 @@
     "product_name": "Local Traffic Manager",
     "product_version_regex": ".*",
     "publisher": "Splunk",
-    "license": "Copyright (c) 2019 Splunk Inc.",
-    "app_version": "1.1.1",
+    "license": "Copyright (c) 2019-2020 Splunk Inc.",
+    "app_version": "2.0.0",
+    "python_version": "3",
     "utctime_updated": "2019-12-06T18:24:30.000000Z",
     "package_name": "phantom_f5bigipltm",
-    "main_module": "f5bigipltm_connector.pyc",
-    "min_phantom_version": "4.5.15922",
+    "main_module": "f5bigipltm_connector.py",
+    "min_phantom_version": "4.6.19142",
     "app_wizard_version": "1.0.0",
+    "latest_tested_versions": [
+        "BIG-IP 15.0.0 Build 0.0.39 Final"
+    ],
     "configuration": {
         "base_url": {
             "description": "Base URL of F5 BIG-IP LTM instance (e.g. https://10.1.16.110)",
@@ -27,19 +31,19 @@
             "description": "User name",
             "data_type": "string",
             "required": true,
-            "order": 1
+            "order": 2
         },
         "password": {
             "description": "Password",
             "data_type": "password",
             "required": true,
-            "order": 2
+            "order": 3
         },
         "verify_server_cert": {
             "description": "Verify Server SSL certificate",
             "data_type": "boolean",
             "default": false,
-            "order": 3
+            "order": 1
         }
     },
     "actions": [
@@ -86,7 +90,8 @@
                     "required": true,
                     "primary": true,
                     "contains": [
-                        "ip"
+                        "ip",
+                        "ipv6"
                     ],
                     "order": 2
                 }
@@ -95,8 +100,6 @@
                 {
                     "data_path": "action_result.status",
                     "data_type": "string",
-                    "column_name": "Status",
-                    "column_order": 1,
                     "example_values": [
                         "success",
                         "failed"
@@ -109,14 +112,13 @@
                         "1.1.1.1"
                     ],
                     "contains": [
-                        "ip"
+                        "ip",
+                        "ipv6"
                     ]
                 },
                 {
                     "data_path": "action_result.parameter.node_name",
                     "data_type": "string",
-                    "column_name": "Node Name",
-                    "column_order": 0,
                     "example_values": [
                         "test"
                     ],
@@ -142,7 +144,9 @@
                     ],
                     "contains": [
                         "ip"
-                    ]
+                    ],
+                    "column_name": "IP Address",
+                    "column_order": 3
                 },
                 {
                     "data_path": "action_result.data.*.connectionLimit",
@@ -233,14 +237,24 @@
                     "data_type": "string",
                     "example_values": [
                         "test"
-                    ]
+                    ],
+                    "contains": [
+                        "f5 node name"
+                    ],
+                    "column_name": "Node Name",
+                    "column_order": 0
                 },
                 {
                     "data_path": "action_result.data.*.partition",
                     "data_type": "string",
                     "example_values": [
                         "Common"
-                    ]
+                    ],
+                    "contains": [
+                        "f5 partition name"
+                    ],
+                    "column_name": "Partition Name",
+                    "column_order": 1
                 },
                 {
                     "data_path": "action_result.data.*.rateLimit",
@@ -278,7 +292,9 @@
                     "data_type": "string",
                     "example_values": [
                         "unchecked"
-                    ]
+                    ],
+                    "column_name": "Node State",
+                    "column_order": 2
                 },
                 {
                     "data_path": "action_result.summary.node_name",
@@ -424,7 +440,7 @@
                     "order": 1
                 },
                 "pool_name": {
-                    "description": "Name of pool to remove the node from",
+                    "description": "Name of the pool to remove the node from",
                     "data_type": "string",
                     "required": true,
                     "primary": true,
@@ -439,7 +455,7 @@
                     "data_path": "action_result.status",
                     "data_type": "string",
                     "column_name": "Status",
-                    "column_order": 1,
+                    "column_order": 3,
                     "example_values": [
                         "success",
                         "failed"
@@ -465,7 +481,9 @@
                     ],
                     "contains": [
                         "f5 pool name"
-                    ]
+                    ],
+                    "column_name": "Pool Name",
+                    "column_order": 1
                 },
                 {
                     "data_path": "action_result.parameter.port",
@@ -476,7 +494,9 @@
                     ],
                     "contains": [
                         "port"
-                    ]
+                    ],
+                    "column_name": "Port",
+                    "column_order": 2
                 },
                 {
                     "data_path": "action_result.data",
@@ -547,7 +567,7 @@
             "read_only": false,
             "parameters": {
                 "pool_name": {
-                    "description": "Name of pool to create",
+                    "description": "Name of the pool to create",
                     "data_type": "string",
                     "required": true,
                     "primary": true,
@@ -559,7 +579,6 @@
                 "pool_description": {
                     "description": "Description of the pool",
                     "data_type": "string",
-                    "required": false,
                     "order": 1
                 },
                 "partition_name": {
@@ -580,13 +599,13 @@
                     "example_values": [
                         "success",
                         "failed"
-                    ]
+                    ],
+                    "column_name": "Status",
+                    "column_order": 2
                 },
                 {
                     "data_path": "action_result.parameter.partition_name",
                     "data_type": "string",
-                    "column_name": "Partition",
-                    "column_order": 1,
                     "example_values": [
                         "Common"
                     ],
@@ -597,8 +616,6 @@
                 {
                     "data_path": "action_result.parameter.pool_description",
                     "data_type": "string",
-                    "column_name": "Pool Description",
-                    "column_order": 2,
                     "example_values": [
                         "test pool creation"
                     ]
@@ -606,8 +623,6 @@
                 {
                     "data_path": "action_result.parameter.pool_name",
                     "data_type": "string",
-                    "column_name": "Pool Name",
-                    "column_order": 0,
                     "example_values": [
                         "pool3"
                     ],
@@ -743,14 +758,24 @@
                     "data_type": "string",
                     "example_values": [
                         "pool3"
-                    ]
+                    ],
+                    "contains": [
+                        "f5 pool name"
+                    ],
+                    "column_name": "Pool Name",
+                    "column_order": 0
                 },
                 {
                     "data_path": "action_result.data.*.partition",
                     "data_type": "string",
                     "example_values": [
                         "Common"
-                    ]
+                    ],
+                    "contains": [
+                        "f5 partition name"
+                    ],
+                    "column_name": "Partition Name",
+                    "column_order": 1
                 },
                 {
                     "data_path": "action_result.data.*.queueDepthLimit",
@@ -809,6 +834,9 @@
                     "data_type": "string",
                     "example_values": [
                         "Common"
+                    ],
+                    "contains": [
+                        "f5 partition name"
                     ]
                 },
                 {
@@ -823,6 +851,9 @@
                     "data_type": "string",
                     "example_values": [
                         "pool3"
+                    ],
+                    "contains": [
+                        "f5 pool name"
                     ]
                 },
                 {
@@ -855,7 +886,7 @@
         {
             "action": "add node",
             "identifier": "add_node",
-            "description": "Add a node to a pool",
+            "description": "Add an existing node to a pool",
             "type": "generic",
             "read_only": false,
             "parameters": {
@@ -905,7 +936,7 @@
                     "data_path": "action_result.status",
                     "data_type": "string",
                     "column_name": "Status",
-                    "column_order": 1,
+                    "column_order": 6,
                     "example_values": [
                         "success",
                         "failed"
@@ -931,7 +962,9 @@
                     ],
                     "contains": [
                         "f5 partition name"
-                    ]
+                    ],
+                    "column_name": "Partition Name",
+                    "column_order": 1
                 },
                 {
                     "data_path": "action_result.parameter.pool_name",
@@ -941,7 +974,9 @@
                     ],
                     "contains": [
                         "f5 pool name"
-                    ]
+                    ],
+                    "column_name": "Pool Name",
+                    "column_order": 2
                 },
                 {
                     "data_path": "action_result.parameter.port",
@@ -952,7 +987,9 @@
                     ],
                     "contains": [
                         "port"
-                    ]
+                    ],
+                    "column_name": "Port",
+                    "column_order": 3
                 },
                 {
                     "data_path": "action_result.data.*.address",
@@ -963,7 +1000,9 @@
                     ],
                     "contains": [
                         "ip"
-                    ]
+                    ],
+                    "column_name": "IP Address",
+                    "column_order": 4
                 },
                 {
                     "data_path": "action_result.data.*.connectionLimit",
@@ -1042,6 +1081,9 @@
                     "example_values": [
                         "test7:80",
                         "test8:443"
+                    ],
+                    "contains": [
+                        "f5 node name"
                     ]
                 },
                 {
@@ -1049,6 +1091,9 @@
                     "data_type": "string",
                     "example_values": [
                         "Common"
+                    ],
+                    "contains": [
+                        "f5 partition name"
                     ]
                 },
                 {
@@ -1096,7 +1141,9 @@
                     "example_values": [
                         "checking",
                         "unchecked"
-                    ]
+                    ],
+                    "column_name": "Node State",
+                    "column_order": 5
                 },
                 {
                     "data_path": "action_result.summary.node_name",
@@ -1110,6 +1157,9 @@
                     "data_type": "string",
                     "example_values": [
                         "pool3"
+                    ],
+                    "contains": [
+                        "f5 pool name"
                     ]
                 },
                 {
@@ -1117,6 +1167,9 @@
                     "data_type": "string",
                     "example_values": [
                         "443"
+                    ],
+                    "contains": [
+                        "port"
                     ]
                 },
                 {
@@ -1150,7 +1203,8 @@
             "action": "disable node",
             "identifier": "disable_node",
             "description": "Disable a node",
-            "type": "generic",
+            "undo": "enable node",
+            "type": "contain",
             "read_only": false,
             "parameters": {
                 "node_name": {
@@ -1169,7 +1223,7 @@
                     "data_path": "action_result.status",
                     "data_type": "string",
                     "column_name": "Status",
-                    "column_order": 1,
+                    "column_order": 3,
                     "example_values": [
                         "success",
                         "failed"
@@ -1178,8 +1232,6 @@
                 {
                     "data_path": "action_result.parameter.node_name",
                     "data_type": "string",
-                    "column_name": "Node Name",
-                    "column_order": 0,
                     "example_values": [
                         "test8"
                     ],
@@ -1196,13 +1248,22 @@
                     ],
                     "contains": [
                         "ip"
-                    ]
+                    ],
+                    "column_name": "IP Address",
+                    "column_order": 1
                 },
                 {
                     "data_path": "action_result.data.*.connectionLimit",
                     "data_type": "numeric",
                     "example_values": [
                         0
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.description",
+                    "data_type": "string",
+                    "example_values": [
+                        "This node was created for testing"
                     ]
                 },
                 {
@@ -1288,6 +1349,11 @@
                     "data_type": "string",
                     "example_values": [
                         "test7"
+                    ],
+                    "column_name": "Node Name",
+                    "column_order": 0,
+                    "contains": [
+                        "f5 node name"
                     ]
                 },
                 {
@@ -1326,7 +1392,9 @@
                     "data_type": "string",
                     "example_values": [
                         "unchecked"
-                    ]
+                    ],
+                    "column_name": "Node State",
+                    "column_order": 2
                 },
                 {
                     "data_path": "action_result.summary.node_name",
@@ -1366,7 +1434,8 @@
             "action": "enable node",
             "identifier": "enable_node",
             "description": "Enable a node",
-            "type": "generic",
+            "undo": "disable node",
+            "type": "correct",
             "read_only": false,
             "parameters": {
                 "node_name": {
@@ -1385,7 +1454,7 @@
                     "data_path": "action_result.status",
                     "data_type": "string",
                     "column_name": "Status",
-                    "column_order": 1,
+                    "column_order": 3,
                     "example_values": [
                         "success",
                         "failed"
@@ -1394,8 +1463,6 @@
                 {
                     "data_path": "action_result.parameter.node_name",
                     "data_type": "string",
-                    "column_name": "Node Name",
-                    "column_order": 0,
                     "example_values": [
                         "test8"
                     ],
@@ -1411,13 +1478,22 @@
                     ],
                     "contains": [
                         "ip"
-                    ]
+                    ],
+                    "column_name": "IP Address",
+                    "column_order": 1
                 },
                 {
                     "data_path": "action_result.data.*.connectionLimit",
                     "data_type": "numeric",
                     "example_values": [
                         0
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.description",
+                    "data_type": "string",
+                    "example_values": [
+                        "This node was created for testing"
                     ]
                 },
                 {
@@ -1502,6 +1578,11 @@
                     "data_type": "string",
                     "example_values": [
                         "test8"
+                    ],
+                    "column_name": "Node Name",
+                    "column_order": 0,
+                    "contains": [
+                        "f5 node name"
                     ]
                 },
                 {
@@ -1540,7 +1621,9 @@
                     "data_type": "string",
                     "example_values": [
                         "unchecked"
-                    ]
+                    ],
+                    "column_name": "Node State",
+                    "column_order": 2
                 },
                 {
                     "data_path": "action_result.summary.node_name",
@@ -1599,7 +1682,7 @@
                     "data_path": "action_result.status",
                     "data_type": "string",
                     "column_name": "Status",
-                    "column_order": 1,
+                    "column_order": 3,
                     "example_values": [
                         "success",
                         "failed"
@@ -1608,8 +1691,6 @@
                 {
                     "data_path": "action_result.parameter.node_name",
                     "data_type": "string",
-                    "column_name": "Node Name",
-                    "column_order": 0,
                     "example_values": [
                         "test8"
                     ],
@@ -1625,7 +1706,9 @@
                     ],
                     "contains": [
                         "ip"
-                    ]
+                    ],
+                    "column_name": "IP Address",
+                    "column_order": 1
                 },
                 {
                     "data_path": "action_result.data.*.connectionLimit",
@@ -1717,6 +1800,11 @@
                     "data_type": "string",
                     "example_values": [
                         "test8"
+                    ],
+                    "column_name": "Node Name",
+                    "column_order": 0,
+                    "contains": [
+                        "f5 node name"
                     ]
                 },
                 {
@@ -1756,7 +1844,9 @@
                     "data_type": "string",
                     "example_values": [
                         "unchecked"
-                    ]
+                    ],
+                    "column_name": "Node State",
+                    "column_order": 2
                 },
                 {
                     "data_path": "action_result.summary.state",
@@ -1812,20 +1902,6 @@
             },
             "output": [
                 {
-                    "data_path": "summary.total_objects",
-                    "data_type": "numeric",
-                    "example_values": [
-                        1
-                    ]
-                },
-                {
-                    "data_path": "summary.total_objects_successful",
-                    "data_type": "numeric",
-                    "example_values": [
-                        1
-                    ]
-                },
-                {
                     "data_path": "action_result.status",
                     "data_type": "string",
                     "column_name": "Status",
@@ -1833,20 +1909,6 @@
                     "example_values": [
                         "success",
                         "failed"
-                    ]
-                },
-                {
-                    "data_path": "action_result.message",
-                    "data_type": "string",
-                    "example_values": [
-                        "Successfully retrieved node stats"
-                    ]
-                },
-                {
-                    "data_path": "action_result.summary.num_connections",
-                    "data_type": "numeric",
-                    "example_values": [
-                        4
                     ]
                 },
                 {
@@ -1862,35 +1924,14 @@
                     ]
                 },
                 {
-                    "data_path": "action_result.data.*.serverside_bitsOut.value",
-                    "data_type": "numeric",
-                    "example_values": [
-                        0
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.status_availabilityState.description",
+                    "data_path": "action_result.data.*.addr.description",
                     "data_type": "string",
                     "example_values": [
-                        "unknown"
+                        "1.1.1.1"
                     ]
                 },
                 {
-                    "data_path": "action_result.data.*.serverside_maxConns.value",
-                    "data_type": "numeric",
-                    "example_values": [
-                        100
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.monitorStatus.description",
-                    "data_type": "string",
-                    "example_values": [
-                        "unchecked"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.serverside_curConns.value",
+                    "data_path": "action_result.data.*.curSessions.value",
                     "data_type": "numeric",
                     "example_values": [
                         0
@@ -1904,10 +1945,87 @@
                     ]
                 },
                 {
+                    "data_path": "action_result.data.*.monitorStatus.description",
+                    "data_type": "string",
+                    "example_values": [
+                        "unchecked"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.serverside_bitsIn.value",
+                    "data_type": "numeric",
+                    "example_values": [
+                        0
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.serverside_bitsOut.value",
+                    "data_type": "numeric",
+                    "example_values": [
+                        0
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.serverside_curConns.value",
+                    "data_type": "numeric",
+                    "example_values": [
+                        0
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.serverside_maxConns.value",
+                    "data_type": "numeric",
+                    "example_values": [
+                        100
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.serverside_pktsIn.value",
+                    "data_type": "numeric",
+                    "example_values": [
+                        0
+                    ]
+                },
+                {
                     "data_path": "action_result.data.*.serverside_pktsOut.value",
                     "data_type": "numeric",
                     "example_values": [
                         0
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.serverside_totConns.value",
+                    "data_type": "numeric",
+                    "example_values": [
+                        0
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.sessionStatus.description",
+                    "data_type": "string",
+                    "example_values": [
+                        "enabled"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.status_availabilityState.description",
+                    "data_type": "string",
+                    "example_values": [
+                        "unknown"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.status_enabledState.description",
+                    "data_type": "string",
+                    "example_values": [
+                        "enabled"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.status_statusReason.description",
+                    "data_type": "string",
+                    "example_values": [
+                        "Node address does not have service checking enabled"
                     ]
                 },
                 {
@@ -1925,59 +2043,31 @@
                     ]
                 },
                 {
-                    "data_path": "action_result.data.*.status_enabledState.description",
-                    "data_type": "string",
-                    "example_values": [
-                        "enabled"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.serverside_pktsIn.value",
+                    "data_path": "action_result.summary.num_connections",
                     "data_type": "numeric",
                     "example_values": [
-                        0
+                        4
                     ]
                 },
                 {
-                    "data_path": "action_result.data.*.serverside_totConns.value",
-                    "data_type": "numeric",
-                    "example_values": [
-                        0
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.serverside_bitsIn.value",
-                    "data_type": "numeric",
-                    "example_values": [
-                        0
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.addr.description",
+                    "data_path": "action_result.message",
                     "data_type": "string",
                     "example_values": [
-                        "1.1.1.1"
+                        "Successfully retrieved node stats"
                     ]
                 },
                 {
-                    "data_path": "action_result.data.*.status_statusReason.description",
-                    "data_type": "string",
-                    "example_values": [
-                        "Node address does not have service checking enabled"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.curSessions.value",
+                    "data_path": "summary.total_objects",
                     "data_type": "numeric",
                     "example_values": [
-                        0
+                        1
                     ]
                 },
                 {
-                    "data_path": "action_result.data.*.sessionStatus.description",
-                    "data_type": "string",
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric",
                     "example_values": [
-                        "enabled"
+                        1
                     ]
                 }
             ],
@@ -1989,10 +2079,16 @@
         {
             "action": "list nodes",
             "identifier": "list_nodes",
-            "description": "List all nodes",
+            "description": "Fetch a list of nodes (if no value is provided, all nodes will be returned)",
             "type": "investigate",
             "read_only": true,
-            "parameters": {},
+            "parameters": {
+                "max_results": {
+                    "description": "Max number of nodes to return",
+                    "data_type": "numeric",
+                    "order": 0
+                }
+            },
             "output": [
                 {
                     "data_path": "action_result.status",
@@ -2000,6 +2096,13 @@
                     "example_values": [
                         "success",
                         "failed"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.max_results",
+                    "data_type": "numeric",
+                    "example_values": [
+                        10
                     ]
                 },
                 {
@@ -2021,6 +2124,13 @@
                     "column_order": 5,
                     "example_values": [
                         0
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.description",
+                    "data_type": "string",
+                    "example_values": [
+                        "IIS1"
                     ]
                 },
                 {
@@ -2111,15 +2221,21 @@
                     "column_order": 0,
                     "example_values": [
                         "test8"
+                    ],
+                    "contains": [
+                        "f5 node name"
                     ]
                 },
                 {
                     "data_path": "action_result.data.*.partition",
                     "data_type": "string",
-                    "column_name": "Partition",
+                    "column_name": "Partition Name",
                     "column_order": 1,
                     "example_values": [
                         "Common"
+                    ],
+                    "contains": [
+                        "f5 partition name"
                     ]
                 },
                 {
@@ -2158,6 +2274,15 @@
                     "data_type": "string",
                     "example_values": [
                         "unchecked"
+                    ],
+                    "column_name": "Node State",
+                    "column_order": 6
+                },
+                {
+                    "data_path": "action_result.summary.node_names",
+                    "data_type": "string",
+                    "example_values": [
+                        "10.1.17.97, 10.1.17.98, a13"
                     ]
                 },
                 {
@@ -2171,7 +2296,7 @@
                     "data_path": "action_result.message",
                     "data_type": "string",
                     "example_values": [
-                        "Num nodes: 4"
+                        "Node names: 10.1.17.97, 10.1.17.98, a13, Num nodes: 3"
                     ]
                 },
                 {
@@ -2197,10 +2322,16 @@
         {
             "action": "list pools",
             "identifier": "list_pools",
-            "description": "List all configured pools",
+            "description": "Fetch a list of configured pools (if no value is provided, all pools will be returned)",
             "type": "investigate",
             "read_only": true,
-            "parameters": {},
+            "parameters": {
+                "max_results": {
+                    "description": "Max number of pools to return",
+                    "data_type": "numeric",
+                    "order": 0
+                }
+            },
             "output": [
                 {
                     "data_path": "action_result.status",
@@ -2208,6 +2339,13 @@
                     "example_values": [
                         "success",
                         "failed"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.max_results",
+                    "data_type": "numeric",
+                    "example_values": [
+                        10
                     ]
                 },
                 {
@@ -2222,6 +2360,13 @@
                     "data_type": "string",
                     "example_values": [
                         "yes"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.description",
+                    "data_type": "string",
+                    "example_values": [
+                        "Pool of IIS servers for IT Automation UC1a"
                     ]
                 },
                 {
@@ -2401,6 +2546,9 @@
                     "data_type": "string",
                     "example_values": [
                         "Common"
+                    ],
+                    "contains": [
+                        "f5 partition name"
                     ]
                 },
                 {
@@ -2649,15 +2797,21 @@
                     "column_order": 0,
                     "example_values": [
                         "pool1"
+                    ],
+                    "contains": [
+                        "f5 pool name"
                     ]
                 },
                 {
                     "data_path": "action_result.data.*.partition",
-                    "column_name": "Partition",
+                    "column_name": "Partition Name",
                     "column_order": 1,
                     "data_type": "string",
                     "example_values": [
                         "Common"
+                    ],
+                    "contains": [
+                        "f5 partition name"
                     ]
                 },
                 {
@@ -2750,7 +2904,7 @@
         {
             "action": "list members",
             "identifier": "list_members",
-            "description": "List all configured node members of a pool",
+            "description": "Fetch a list of configured node members of a pool (if no value is provided, all node members of a pool will be returned)",
             "type": "investigate",
             "read_only": true,
             "parameters": {
@@ -2773,6 +2927,11 @@
                         "f5 partition name"
                     ],
                     "order": 1
+                },
+                "max_results": {
+                    "description": "Max number of members to return",
+                    "data_type": "numeric",
+                    "order": 2
                 }
             },
             "output": [
@@ -2782,6 +2941,13 @@
                     "example_values": [
                         "success",
                         "failed"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.max_results",
+                    "data_type": "numeric",
+                    "example_values": [
+                        10
                     ]
                 },
                 {
@@ -2903,7 +3069,12 @@
                     "data_type": "string",
                     "example_values": [
                         "Common"
-                    ]
+                    ],
+                    "contains": [
+                        "f5 partition name"
+                    ],
+                    "column_name": "Partition Name",
+                    "column_order": 2
                 },
                 {
                     "data_path": "action_result.data.*.priorityGroup",
@@ -2949,14 +3120,14 @@
                     "example_values": [
                         "up"
                     ],
-                    "column_name": "State",
-                    "column_order": 2
+                    "column_name": "Node State",
+                    "column_order": 3
                 },
                 {
                     "data_path": "action_result.summary.members",
                     "data_type": "string",
                     "example_values": [
-                        "test1:80,test2:80,test3:80,test10:80"
+                        "10.1.17.97:8080, 10.1.17.98:8080, a13:8080"
                     ]
                 },
                 {
@@ -2970,7 +3141,7 @@
                     "data_path": "action_result.message",
                     "data_type": "string",
                     "example_values": [
-                        "Successfully listed pool members"
+                        "Num members: 3, Members: 10.1.17.97:8080, 10.1.17.98:8080, a13:8080"
                     ]
                 },
                 {
