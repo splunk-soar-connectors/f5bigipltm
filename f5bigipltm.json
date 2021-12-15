@@ -9,7 +9,7 @@
     "product_name": "Local Traffic Manager",
     "product_version_regex": ".*",
     "publisher": "Splunk",
-    "license": "Copyright (c) 2019-2020 Splunk Inc.",
+    "license": "Copyright (c) 2019-2021 Splunk Inc.",
     "app_version": "2.0.5",
     "python_version": "3",
     "fips_compliant": true,

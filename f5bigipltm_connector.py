@@ -1,6 +1,6 @@
 # File: f5bigipltm_connector.py
 #
-# Copyright (c) 2019-2020 Splunk Inc.
+# Copyright (c) 2019-2021 Splunk Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -554,7 +554,7 @@ class F5BigipLtmConnector(BaseConnector):
             # " --> \\\" which gets represented as \\\\\\\" in the Python string
             # \ --> \\\\ which gets represented as \\\\\\\\ in the Python string
             pool_description = self._handle_py_ver_compat_for_input_str(self._python_version,
-                param['pool_description']).replace("\\", "\\\\\\\\").replace('"', '\\\\\\"')
+                param.get('pool_description')).replace("\\", "\\\\\\\\").replace('"', '\\\\\\"')
             json_str = '{{"name": "{0}", "partition": "{1}", "description": "{2}"}}'.format(pool_name, partition_name, pool_description)
         else:
             json_str = '{{"name": "{0}", "partition": "{1}"}}'.format(pool_name, partition_name)
