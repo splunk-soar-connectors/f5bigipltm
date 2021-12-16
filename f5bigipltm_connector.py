@@ -1,6 +1,6 @@
 # File: f5bigipltm_connector.py
 #
-# Copyright (c) 2019-2020 Splunk Inc.
+# Copyright (c) 2019-2021 Splunk Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,17 +14,15 @@
 # and limitations under the License.
 #
 #
-# Phantom App imports
-import phantom.app as phantom
-from phantom.base_connector import BaseConnector
-from phantom.action_result import ActionResult
-
-# Usage of the consts file is recommended
-import requests
-import json
 import ipaddress
+import json
 import sys
+
+import phantom.app as phantom
+import requests
 from bs4 import BeautifulSoup, UnicodeDammit
+from phantom.action_result import ActionResult
+from phantom.base_connector import BaseConnector
 
 
 class RetVal(tuple):
@@ -102,7 +100,7 @@ class F5BigipLtmConnector(BaseConnector):
                 else:
                     error_msg = "Unable to find 'message' key in the JSON error response"
                 message = "Error occurred while making the request. Status Code: {0}. Response Code: {1}. Message from server: {2}".format(
-                                                                                                                    r.status_code, resp_json.get("code"), error_msg)
+                    r.status_code, resp_json.get("code"), error_msg)
             else:
                 # You should process the error returned in the json
                 try:
@@ -115,7 +113,8 @@ class F5BigipLtmConnector(BaseConnector):
                         r.status_code, error_msg)
         except Exception as e:
             _, error_msg = self._get_error_message_from_exception(e)
-            message = "Unknown error occurred while processing the output response from the server. Status Code: {0}. Data from server: {1}".format(r.status_code, error_msg)
+            message = "Unknown error occurred while processing the output response from the server. " \
+                "Status Code: {0}. Data from server: {1}".format(r.status_code, error_msg)
 
         return RetVal(action_result.set_status(phantom.APP_ERROR, message), None)
 
@@ -215,8 +214,8 @@ class F5BigipLtmConnector(BaseConnector):
             url = "{}{}".format(self._base_url, endpoint)
         except Exception as e:
             error_code, error_msg = self._get_error_message_from_exception(e)
-            return RetVal(action_result.set_status(phantom.APP_ERROR, "Error occurred while creating the REST URL for the API call. Error Code: {0}. Error Message: {1}".format(
-                error_code, error_msg)), None)
+            return RetVal(action_result.set_status(phantom.APP_ERROR, "Error occurred while creating the REST URL for the API call. "
+                "Error Code: {0}. Error Message: {1}".format(error_code, error_msg)), None)
 
         try:
             r = request_func(
@@ -227,8 +226,8 @@ class F5BigipLtmConnector(BaseConnector):
                             **kwargs)
         except Exception as e:
             error_code, error_msg = self._get_error_message_from_exception(e)
-            return RetVal(action_result.set_status(phantom.APP_ERROR, "Error occurred while making the REST call to the F5 server. Error Code: {0}. Error Message: {1}".format(
-                            error_code, error_msg)), None)
+            return RetVal(action_result.set_status(phantom.APP_ERROR, "Error occurred while making the REST call to the F5 server. "
+                "Error Code: {0}. Error Message: {1}".format(error_code, error_msg)), None)
 
         return self._process_response(r, action_result)
 
@@ -269,7 +268,8 @@ class F5BigipLtmConnector(BaseConnector):
             return action_result.set_status(phantom.APP_ERROR, "Please enter the port in range of 0 to 65535")
 
         # make rest call
-        ret_val, response = self._make_rest_call('/mgmt/tm/ltm/pool/{0}/members/{1}:{2}'.format(pool_name, node_name, port), action_result, method="delete")
+        ret_val, response = self._make_rest_call('/mgmt/tm/ltm/pool/{0}/members/{1}:{2}'.format(
+            pool_name, node_name, port), action_result, method="delete")
 
         if (phantom.is_fail(ret_val)):
             return action_result.get_status()
@@ -290,7 +290,8 @@ class F5BigipLtmConnector(BaseConnector):
         action_result = self.add_action_result(ActionResult(dict(param)))
         node_name = self._handle_py_ver_compat_for_input_str(self._python_version, param['node_name']).replace('\\', '\\\\').replace('"', '\\"')
         port = param['port']
-        partition_name = self._handle_py_ver_compat_for_input_str(self._python_version, param['partition_name']).replace('\\', '\\\\').replace('"', '\\"')
+        partition_name = self._handle_py_ver_compat_for_input_str(self._python_version,
+            param['partition_name']).replace('\\', '\\\\').replace('"', '\\"')
         pool_name = self._handle_py_ver_compat_for_input_str(self._python_version, param['pool_name']).replace('\\', '\\\\').replace('"', '\\"')
 
         try:
@@ -371,7 +372,8 @@ class F5BigipLtmConnector(BaseConnector):
         action_result = self.add_action_result(ActionResult(dict(param)))
 
         node = self._handle_py_ver_compat_for_input_str(self._python_version, param['node_name']).replace('\\', '\\\\').replace('"', '\\"')
-        partition = self._handle_py_ver_compat_for_input_str(self._python_version, param['partition_name']).replace('\\', '\\\\').replace('"', '\\"')
+        partition = self._handle_py_ver_compat_for_input_str(self._python_version,
+            param['partition_name']).replace('\\', '\\\\').replace('"', '\\"')
         address = param['ip_address']
 
         json_str = '{{"name": "{}", "partition": "{}", "address": "{}"}}'.format(node, partition, address)
@@ -418,7 +420,8 @@ class F5BigipLtmConnector(BaseConnector):
         param['session'] = 'user-disabled'
 
         # make rest call
-        ret_val, response = self._make_rest_call('/mgmt/tm/ltm/node/{0}'.format(node_name), action_result, method="patch", json={'session': 'user-disabled'})
+        ret_val, response = self._make_rest_call('/mgmt/tm/ltm/node/{0}'.format(
+            node_name), action_result, method="patch", json={'session': 'user-disabled'})
 
         if (phantom.is_fail(ret_val)):
             return action_result.get_status()
@@ -441,7 +444,8 @@ class F5BigipLtmConnector(BaseConnector):
         param['session'] = 'user-enabled'
 
         # make rest call
-        ret_val, response = self._make_rest_call('/mgmt/tm/ltm/node/{0}'.format(node_name), action_result, method="patch", json={'session': 'user-enabled'})
+        ret_val, response = self._make_rest_call('/mgmt/tm/ltm/node/{0}'.format(
+            node_name), action_result, method="patch", json={'session': 'user-enabled'})
 
         if (phantom.is_fail(ret_val)):
             return action_result.get_status()
@@ -541,15 +545,16 @@ class F5BigipLtmConnector(BaseConnector):
         action_result = self.add_action_result(ActionResult(dict(param)))
 
         pool_name = self._handle_py_ver_compat_for_input_str(self._python_version, param['pool_name']).replace('\\', '\\\\').replace('"', '\\"')
-        partition_name = self._handle_py_ver_compat_for_input_str(self._python_version, param['partition_name']).replace('\\', '\\\\').replace('"', '\\"')
+        partition_name = self._handle_py_ver_compat_for_input_str(self._python_version,
+            param['partition_name']).replace('\\', '\\\\').replace('"', '\\"')
         pool_description = param.get('pool_description')
 
         if pool_description:
             # The F5 server requires the below replacement for some special characters as mentioned below.
             # " --> \\\" which gets represented as \\\\\\\" in the Python string
             # \ --> \\\\ which gets represented as \\\\\\\\ in the Python string
-            pool_description = self._handle_py_ver_compat_for_input_str(self._python_version, param['pool_description']).replace("\\", "\\\\\\\\").replace(
-                '"', '\\\\\\"')
+            pool_description = self._handle_py_ver_compat_for_input_str(self._python_version,
+                param.get('pool_description')).replace("\\", "\\\\\\\\").replace('"', '\\\\\\"')
             json_str = '{{"name": "{0}", "partition": "{1}", "description": "{2}"}}'.format(pool_name, partition_name, pool_description)
         else:
             json_str = '{{"name": "{0}", "partition": "{1}"}}'.format(pool_name, partition_name)
@@ -714,8 +719,9 @@ class F5BigipLtmConnector(BaseConnector):
 
 if __name__ == '__main__':
 
-    import pudb
     import argparse
+
+    import pudb
 
     pudb.set_trace()
 
