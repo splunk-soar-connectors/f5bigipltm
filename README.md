@@ -2,7 +2,7 @@
 # F5 BIG\-IP LTM
 
 Publisher: Splunk  
-Connector Version: 2\.0\.6  
+Connector Version: 2\.0\.8  
 Product Vendor: F5  
 Product Name: Local Traffic Manager  
 Product Version Supported (regex): "\.\*"  
