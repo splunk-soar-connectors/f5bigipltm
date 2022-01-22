@@ -1,21 +1,28 @@
 # File: f5bigipltm_connector.py
 #
-# Copyright (c) 2019-2020 Splunk Inc.
+# Copyright (c) 2019-2022 Splunk Inc.
 #
-# SPLUNK CONFIDENTIAL - Use or disclosure of this material in whole or in part
-# without a valid written license from Splunk Inc. is PROHIBITED.
-
-# Phantom App imports
-import phantom.app as phantom
-from phantom.base_connector import BaseConnector
-from phantom.action_result import ActionResult
-
-# Usage of the consts file is recommended
-import requests
-import json
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software distributed under
+# the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+# either express or implied. See the License for the specific language governing permissions
+# and limitations under the License.
+#
+#
 import ipaddress
+import json
 import sys
+
+import phantom.app as phantom
+import requests
 from bs4 import BeautifulSoup, UnicodeDammit
+from phantom.action_result import ActionResult
+from phantom.base_connector import BaseConnector
 
 
 class RetVal(tuple):
@@ -93,7 +100,7 @@ class F5BigipLtmConnector(BaseConnector):
                 else:
                     error_msg = "Unable to find 'message' key in the JSON error response"
                 message = "Error occurred while making the request. Status Code: {0}. Response Code: {1}. Message from server: {2}".format(
-                                                                                                                    r.status_code, resp_json.get("code"), error_msg)
+                    r.status_code, resp_json.get("code"), error_msg)
             else:
                 # You should process the error returned in the json
                 try:
@@ -106,7 +113,8 @@ class F5BigipLtmConnector(BaseConnector):
                         r.status_code, error_msg)
         except Exception as e:
             _, error_msg = self._get_error_message_from_exception(e)
-            message = "Unknown error occurred while processing the output response from the server. Status Code: {0}. Data from server: {1}".format(r.status_code, error_msg)
+            message = "Unknown error occurred while processing the output response from the server. " \
+                "Status Code: {0}. Data from server: {1}".format(r.status_code, error_msg)
 
         return RetVal(action_result.set_status(phantom.APP_ERROR, message), None)
 
@@ -206,8 +214,8 @@ class F5BigipLtmConnector(BaseConnector):
             url = "{}{}".format(self._base_url, endpoint)
         except Exception as e:
             error_code, error_msg = self._get_error_message_from_exception(e)
-            return RetVal(action_result.set_status(phantom.APP_ERROR, "Error occurred while creating the REST URL for the API call. Error Code: {0}. Error Message: {1}".format(
-                error_code, error_msg)), None)
+            return RetVal(action_result.set_status(phantom.APP_ERROR, "Error occurred while creating the REST URL for the API call. "
+                "Error Code: {0}. Error Message: {1}".format(error_code, error_msg)), None)
 
         try:
             r = request_func(
@@ -218,8 +226,8 @@ class F5BigipLtmConnector(BaseConnector):
                             **kwargs)
         except Exception as e:
             error_code, error_msg = self._get_error_message_from_exception(e)
-            return RetVal(action_result.set_status(phantom.APP_ERROR, "Error occurred while making the REST call to the F5 server. Error Code: {0}. Error Message: {1}".format(
-                            error_code, error_msg)), None)
+            return RetVal(action_result.set_status(phantom.APP_ERROR, "Error occurred while making the REST call to the F5 server. "
+                "Error Code: {0}. Error Message: {1}".format(error_code, error_msg)), None)
 
         return self._process_response(r, action_result)
 
@@ -260,7 +268,8 @@ class F5BigipLtmConnector(BaseConnector):
             return action_result.set_status(phantom.APP_ERROR, "Please enter the port in range of 0 to 65535")
 
         # make rest call
-        ret_val, response = self._make_rest_call('/mgmt/tm/ltm/pool/{0}/members/{1}:{2}'.format(pool_name, node_name, port), action_result, method="delete")
+        ret_val, response = self._make_rest_call('/mgmt/tm/ltm/pool/{0}/members/{1}:{2}'.format(
+            pool_name, node_name, port), action_result, method="delete")
 
         if (phantom.is_fail(ret_val)):
             return action_result.get_status()
@@ -281,7 +290,8 @@ class F5BigipLtmConnector(BaseConnector):
         action_result = self.add_action_result(ActionResult(dict(param)))
         node_name = self._handle_py_ver_compat_for_input_str(self._python_version, param['node_name']).replace('\\', '\\\\').replace('"', '\\"')
         port = param['port']
-        partition_name = self._handle_py_ver_compat_for_input_str(self._python_version, param['partition_name']).replace('\\', '\\\\').replace('"', '\\"')
+        partition_name = self._handle_py_ver_compat_for_input_str(self._python_version,
+            param['partition_name']).replace('\\', '\\\\').replace('"', '\\"')
         pool_name = self._handle_py_ver_compat_for_input_str(self._python_version, param['pool_name']).replace('\\', '\\\\').replace('"', '\\"')
 
         try:
@@ -362,7 +372,8 @@ class F5BigipLtmConnector(BaseConnector):
         action_result = self.add_action_result(ActionResult(dict(param)))
 
         node = self._handle_py_ver_compat_for_input_str(self._python_version, param['node_name']).replace('\\', '\\\\').replace('"', '\\"')
-        partition = self._handle_py_ver_compat_for_input_str(self._python_version, param['partition_name']).replace('\\', '\\\\').replace('"', '\\"')
+        partition = self._handle_py_ver_compat_for_input_str(self._python_version,
+            param['partition_name']).replace('\\', '\\\\').replace('"', '\\"')
         address = param['ip_address']
 
         json_str = '{{"name": "{}", "partition": "{}", "address": "{}"}}'.format(node, partition, address)
@@ -409,7 +420,8 @@ class F5BigipLtmConnector(BaseConnector):
         param['session'] = 'user-disabled'
 
         # make rest call
-        ret_val, response = self._make_rest_call('/mgmt/tm/ltm/node/{0}'.format(node_name), action_result, method="patch", json={'session': 'user-disabled'})
+        ret_val, response = self._make_rest_call('/mgmt/tm/ltm/node/{0}'.format(
+            node_name), action_result, method="patch", json={'session': 'user-disabled'})
 
         if (phantom.is_fail(ret_val)):
             return action_result.get_status()
@@ -432,7 +444,8 @@ class F5BigipLtmConnector(BaseConnector):
         param['session'] = 'user-enabled'
 
         # make rest call
-        ret_val, response = self._make_rest_call('/mgmt/tm/ltm/node/{0}'.format(node_name), action_result, method="patch", json={'session': 'user-enabled'})
+        ret_val, response = self._make_rest_call('/mgmt/tm/ltm/node/{0}'.format(
+            node_name), action_result, method="patch", json={'session': 'user-enabled'})
 
         if (phantom.is_fail(ret_val)):
             return action_result.get_status()
@@ -532,15 +545,16 @@ class F5BigipLtmConnector(BaseConnector):
         action_result = self.add_action_result(ActionResult(dict(param)))
 
         pool_name = self._handle_py_ver_compat_for_input_str(self._python_version, param['pool_name']).replace('\\', '\\\\').replace('"', '\\"')
-        partition_name = self._handle_py_ver_compat_for_input_str(self._python_version, param['partition_name']).replace('\\', '\\\\').replace('"', '\\"')
+        partition_name = self._handle_py_ver_compat_for_input_str(self._python_version,
+            param['partition_name']).replace('\\', '\\\\').replace('"', '\\"')
         pool_description = param.get('pool_description')
 
         if pool_description:
             # The F5 server requires the below replacement for some special characters as mentioned below.
             # " --> \\\" which gets represented as \\\\\\\" in the Python string
             # \ --> \\\\ which gets represented as \\\\\\\\ in the Python string
-            pool_description = self._handle_py_ver_compat_for_input_str(self._python_version, param['pool_description']).replace("\\", "\\\\\\\\").replace(
-                '"', '\\\\\\"')
+            pool_description = self._handle_py_ver_compat_for_input_str(self._python_version,
+                param.get('pool_description')).replace("\\", "\\\\\\\\").replace('"', '\\\\\\"')
             json_str = '{{"name": "{0}", "partition": "{1}", "description": "{2}"}}'.format(pool_name, partition_name, pool_description)
         else:
             json_str = '{{"name": "{0}", "partition": "{1}"}}'.format(pool_name, partition_name)
@@ -705,8 +719,9 @@ class F5BigipLtmConnector(BaseConnector):
 
 if __name__ == '__main__':
 
-    import pudb
     import argparse
+
+    import pudb
 
     pudb.set_trace()
 
@@ -715,12 +730,14 @@ if __name__ == '__main__':
     argparser.add_argument('input_test_json', help='Input Test JSON file')
     argparser.add_argument('-u', '--username', help='username', required=False)
     argparser.add_argument('-p', '--password', help='password', required=False)
+    argparser.add_argument('-v', '--verify', action='store_true', help='verify', required=False, default=False)
 
     args = argparser.parse_args()
     session_id = None
 
     username = args.username
     password = args.password
+    verify = args.verify
 
     if (username is not None and password is None):
 
@@ -733,7 +750,7 @@ if __name__ == '__main__':
             login_url = F5BigipLtmConnector._get_phantom_base_url() + '/login'
 
             print("Accessing the Login page")
-            r = requests.get(login_url, verify=False)
+            r = requests.get(login_url, verify=verify, timeout=30)
             csrftoken = r.cookies['csrftoken']
 
             data = dict()
@@ -746,11 +763,11 @@ if __name__ == '__main__':
             headers['Referer'] = login_url
 
             print("Logging into Platform to get the session id")
-            r2 = requests.post(login_url, verify=False, data=data, headers=headers)
+            r2 = requests.post(login_url, verify=verify, data=data, headers=headers, timeout=30)
             session_id = r2.cookies['sessionid']
         except Exception as e:
             print("Unable to get session id from the platform. Error: " + str(e))
-            exit(1)
+            sys.exit(1)
 
     with open(args.input_test_json) as f:
         in_json = f.read()
@@ -767,4 +784,4 @@ if __name__ == '__main__':
         ret_val = connector._handle_action(json.dumps(in_json), None)
         print(json.dumps(json.loads(ret_val), indent=4))
 
-    exit(0)
+    sys.exit(0)
