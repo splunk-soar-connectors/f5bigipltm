@@ -571,6 +571,27 @@ class F5BigipLtmConnector(BaseConnector):
 
         return action_result.set_status(phantom.APP_SUCCESS, "Successfully created pool")
 
+    def _handle_delete_pool(self, param):
+
+        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
+
+        action_result = self.add_action_result(ActionResult(dict(param)))
+
+        pool_name = self._handle_py_ver_compat_for_input_str(self._python_version, param['pool_name'])
+
+        # make rest call
+        ret_val, response = self._make_rest_call('/mgmt/tm/ltm/pool/{0}'.format(pool_name), action_result, method="delete")
+
+        if phantom.is_fail(ret_val):
+            return action_result.get_status()
+
+        action_result.add_data({})
+
+        summary = action_result.update_summary({})
+        summary['pool_name'] = pool_name
+
+        return action_result.set_status(phantom.APP_SUCCESS, "Successfully deleted pool")
+
     def _handle_list_members(self, param):
 
         self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
@@ -651,6 +672,9 @@ class F5BigipLtmConnector(BaseConnector):
 
         elif action_id == 'create_pool':
             ret_val = self._handle_create_pool(param)
+
+        elif action_id == 'delete_pool':
+            ret_val = self._handle_delete_pool(param)
 
         elif action_id == 'create_node':
             ret_val = self._handle_create_node(param)
