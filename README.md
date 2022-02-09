@@ -2,11 +2,11 @@
 # F5 BIG\-IP LTM
 
 Publisher: Splunk  
-Connector Version: 2\.0\.8  
+Connector Version: 2\.1\.0  
 Product Vendor: F5  
 Product Name: Local Traffic Manager  
 Product Version Supported (regex): "\.\*"  
-Minimum Product Version: 4\.6\.19142  
+Minimum Product Version: 5\.1\.0  
 
 This app implements investigate and generic actions to integrate with an F5 BIG\-IP LTM instance to manage pools and nodes
 
@@ -26,6 +26,7 @@ VARIABLE | REQUIRED | TYPE | DESCRIPTION
 [delete node](#action-delete-node) - Delete a node  
 [remove node](#action-remove-node) - Remove a node from a pool  
 [create pool](#action-create-pool) - Create a new pool  
+[delete pool](#action-delete-pool) - Delete an existing pool  
 [add node](#action-add-node) - Add an existing node to a pool  
 [disable node](#action-disable-node) - Disable a node  
 [enable node](#action-enable-node) - Enable a node  
@@ -190,6 +191,28 @@ action\_result\.data\.\*\.serviceDownAction | string |
 action\_result\.data\.\*\.slowRampTime | numeric | 
 action\_result\.summary\.partition | string |  `f5 partition name` 
 action\_result\.summary\.pool\_description | string | 
+action\_result\.summary\.pool\_name | string |  `f5 pool name` 
+action\_result\.message | string | 
+summary\.total\_objects | numeric | 
+summary\.total\_objects\_successful | numeric |   
+
+## action: 'delete pool'
+Delete an existing pool
+
+Type: **generic**  
+Read only: **False**
+
+#### Action Parameters
+PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
+--------- | -------- | ----------- | ---- | --------
+**pool\_name** |  required  | Name of the pool to delete | string |  `f5 pool name` 
+
+#### Action Output
+DATA PATH | TYPE | CONTAINS
+--------- | ---- | --------
+action\_result\.status | string | 
+action\_result\.parameter\.pool\_name | string |  `f5 pool name` 
+action\_result\.data | string | 
 action\_result\.summary\.pool\_name | string |  `f5 pool name` 
 action\_result\.message | string | 
 summary\.total\_objects | numeric | 
