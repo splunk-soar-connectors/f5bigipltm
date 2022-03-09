@@ -1,1 +1,2 @@
 **Unreleased**
+* F5 BIG-IP LTM Endpoint Request: delete pool [PAPP-23222]
