@@ -6,7 +6,7 @@ Connector Version: 2.1.1
 Product Vendor: F5  
 Product Name: Local Traffic Manager  
 Product Version Supported (regex): ".\*"  
-Minimum Product Version: 5.1.0  
+Minimum Product Version: 6.1.1  
 
 This app implements investigate and generic actions to integrate with an F5 BIG-IP LTM instance to manage pools and nodes
 
