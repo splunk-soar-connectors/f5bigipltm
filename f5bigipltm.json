@@ -16,7 +16,7 @@
     "utctime_updated": "2022-01-19T00:53:17.000000Z",
     "package_name": "phantom_f5bigipltm",
     "main_module": "f5bigipltm_connector.py",
-    "min_phantom_version": "5.1.0",
+    "min_phantom_version": "6.1.1",
     "app_wizard_version": "1.0.0",
     "latest_tested_versions": [
         "BIG-IP 15.0.0 Build 0.0.39 Final"
