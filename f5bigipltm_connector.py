@@ -1,6 +1,6 @@
 # File: f5bigipltm_connector.py
 #
-# Copyright (c) 2019-2022 Splunk Inc.
+# Copyright (c) 2019-2024 Splunk Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -112,9 +112,9 @@ class F5BigipLtmConnector(BaseConnector):
                 message = "Error from server. Status Code: {0} Data from server: {1}".format(
                         r.status_code, error_msg)
         except Exception as e:
-            _, error_msg = self._get_error_message_from_exception(e)
+            _, error_message = self._get_error_message_from_exception(e)
             message = "Unknown error occurred while processing the output response from the server. " \
-                "Status Code: {0}. Data from server: {1}".format(r.status_code, error_msg)
+                "Status Code: {0}. Data from server: {1}".format(r.status_code, error_message)
 
         return RetVal(action_result.set_status(phantom.APP_ERROR, message), None)
 
@@ -213,9 +213,9 @@ class F5BigipLtmConnector(BaseConnector):
         try:
             url = "{}{}".format(self._base_url, endpoint)
         except Exception as e:
-            error_code, error_msg = self._get_error_message_from_exception(e)
+            error_code, error_message = self._get_error_message_from_exception(e)
             return RetVal(action_result.set_status(phantom.APP_ERROR, "Error occurred while creating the REST URL for the API call. "
-                "Error Code: {0}. Error Message: {1}".format(error_code, error_msg)), None)
+                "Error Code: {0}. Error Message: {1}".format(error_code, error_message)), None)
 
         try:
             r = request_func(
@@ -225,9 +225,9 @@ class F5BigipLtmConnector(BaseConnector):
                             data=data,
                             **kwargs)
         except Exception as e:
-            error_code, error_msg = self._get_error_message_from_exception(e)
+            error_code, error_message = self._get_error_message_from_exception(e)
             return RetVal(action_result.set_status(phantom.APP_ERROR, "Error occurred while making the REST call to the F5 server. "
-                "Error Code: {0}. Error Message: {1}".format(error_code, error_msg)), None)
+                "Error Code: {0}. Error Message: {1}".format(error_code, error_message)), None)
 
         return self._process_response(r, action_result)
 
