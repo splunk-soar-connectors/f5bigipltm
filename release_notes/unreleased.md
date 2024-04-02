@@ -1,2 +1,1 @@
 **Unreleased**
-* Remove requests dependency and use the one built into the platform instead [PAPP-33443]
