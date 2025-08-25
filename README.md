@@ -1,9 +1,9 @@
 # F5 BIG-IP LTM
 
-Publisher: Splunk \
-Connector Version: 2.1.2 \
-Product Vendor: F5 \
-Product Name: Local Traffic Manager \
+Publisher: Splunk <br>
+Connector Version: 2.1.2 <br>
+Product Vendor: F5 <br>
+Product Name: Local Traffic Manager <br>
 Minimum Product Version: 6.1.1
 
 This app implements investigate and generic actions to integrate with an F5 BIG-IP LTM instance to manage pools and nodes
@@ -21,26 +21,26 @@ VARIABLE | REQUIRED | TYPE | DESCRIPTION
 
 ### Supported Actions
 
-[test connectivity](#action-test-connectivity) - Validate the asset configuration for connectivity using the supplied configuration \
-[create node](#action-create-node) - Create a new node \
-[delete node](#action-delete-node) - Delete a node \
-[remove node](#action-remove-node) - Remove a node from a pool \
-[create pool](#action-create-pool) - Create a new pool \
-[delete pool](#action-delete-pool) - Delete an existing pool \
-[add node](#action-add-node) - Add an existing node to a pool \
-[disable node](#action-disable-node) - Disable a node \
-[enable node](#action-enable-node) - Enable a node \
-[describe node](#action-describe-node) - Get information about a node \
-[get node stats](#action-get-node-stats) - Get stats of the node \
-[list nodes](#action-list-nodes) - Fetch a list of nodes (if no value is provided, all nodes will be returned) \
-[list pools](#action-list-pools) - Fetch a list of configured pools (if no value is provided, all pools will be returned) \
+[test connectivity](#action-test-connectivity) - Validate the asset configuration for connectivity using the supplied configuration <br>
+[create node](#action-create-node) - Create a new node <br>
+[delete node](#action-delete-node) - Delete a node <br>
+[remove node](#action-remove-node) - Remove a node from a pool <br>
+[create pool](#action-create-pool) - Create a new pool <br>
+[delete pool](#action-delete-pool) - Delete an existing pool <br>
+[add node](#action-add-node) - Add an existing node to a pool <br>
+[disable node](#action-disable-node) - Disable a node <br>
+[enable node](#action-enable-node) - Enable a node <br>
+[describe node](#action-describe-node) - Get information about a node <br>
+[get node stats](#action-get-node-stats) - Get stats of the node <br>
+[list nodes](#action-list-nodes) - Fetch a list of nodes (if no value is provided, all nodes will be returned) <br>
+[list pools](#action-list-pools) - Fetch a list of configured pools (if no value is provided, all pools will be returned) <br>
 [list members](#action-list-members) - Fetch a list of configured node members of a pool (if no value is provided, all node members of a pool will be returned)
 
 ## action: 'test connectivity'
 
 Validate the asset configuration for connectivity using the supplied configuration
 
-Type: **test** \
+Type: **test** <br>
 Read only: **True**
 
 #### Action Parameters
@@ -55,7 +55,7 @@ No Output
 
 Create a new node
 
-Type: **generic** \
+Type: **generic** <br>
 Read only: **False**
 
 #### Action Parameters
@@ -103,7 +103,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Delete a node
 
-Type: **generic** \
+Type: **generic** <br>
 Read only: **False**
 
 #### Action Parameters
@@ -128,7 +128,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Remove a node from a pool
 
-Type: **generic** \
+Type: **generic** <br>
 Read only: **False**
 
 #### Action Parameters
@@ -159,7 +159,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Create a new pool
 
-Type: **generic** \
+Type: **generic** <br>
 Read only: **False**
 
 #### Action Parameters
@@ -215,7 +215,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Delete an existing pool
 
-Type: **generic** \
+Type: **generic** <br>
 Read only: **False**
 
 #### Action Parameters
@@ -240,7 +240,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Add an existing node to a pool
 
-Type: **generic** \
+Type: **generic** <br>
 Read only: **False**
 
 #### Action Parameters
@@ -291,7 +291,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Disable a node
 
-Type: **contain** \
+Type: **contain** <br>
 Read only: **False**
 
 #### Action Parameters
@@ -335,7 +335,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Enable a node
 
-Type: **correct** \
+Type: **correct** <br>
 Read only: **False**
 
 #### Action Parameters
@@ -379,7 +379,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Get information about a node
 
-Type: **investigate** \
+Type: **investigate** <br>
 Read only: **True**
 
 #### Action Parameters
@@ -422,7 +422,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Get stats of the node
 
-Type: **investigate** \
+Type: **investigate** <br>
 Read only: **True**
 
 #### Action Parameters
@@ -463,7 +463,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Fetch a list of nodes (if no value is provided, all nodes will be returned)
 
-Type: **investigate** \
+Type: **investigate** <br>
 Read only: **True**
 
 #### Action Parameters
@@ -509,7 +509,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Fetch a list of configured pools (if no value is provided, all pools will be returned)
 
-Type: **investigate** \
+Type: **investigate** <br>
 Read only: **True**
 
 #### Action Parameters
@@ -601,7 +601,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Fetch a list of configured node members of a pool (if no value is provided, all node members of a pool will be returned)
 
-Type: **investigate** \
+Type: **investigate** <br>
 Read only: **True**
 
 #### Action Parameters
