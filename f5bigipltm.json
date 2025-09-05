@@ -11,7 +11,7 @@
     "publisher": "Splunk",
     "license": "Copyright (c) 2019-2025 Splunk Inc.",
     "app_version": "2.1.2",
-    "python_version": "3",
+    "python_version": "3.9, 3.13",
     "fips_compliant": true,
     "utctime_updated": "2022-01-19T00:53:17.000000Z",
     "package_name": "phantom_f5bigipltm",
@@ -3247,5 +3247,11 @@
             },
             "versions": "EQ(*)"
         }
-    ]
+    ],
+    "pip39_dependencies": {
+        "wheel": []
+    },
+    "pip313_dependencies": {
+        "wheel": []
+    }
 }
