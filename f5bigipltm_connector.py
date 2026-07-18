@@ -17,6 +17,7 @@
 import ipaddress
 import json
 import sys
+from urllib.parse import quote
 
 import phantom.app as phantom
 import requests
@@ -38,6 +39,11 @@ class F5BigipLtmConnector(BaseConnector):
         self._auth = None
         self._state = None
         self._base_url = None
+
+    @staticmethod
+    def _quote_path_component(value):
+        """Percent-encode a user-controlled F5 REST path component."""
+        return quote(str(value), safe="").replace("~", "%7E")
 
     def _process_empty_response(self, response, action_result):
         # The JSON Content-Type data can also come here if r.text is empty, hence,
@@ -265,7 +271,12 @@ class F5BigipLtmConnector(BaseConnector):
             return action_result.set_status(phantom.APP_ERROR, "Please enter the port in range of 0 to 65535")
 
         # make rest call
-        ret_val, response = self._make_rest_call(f"/mgmt/tm/ltm/pool/{pool_name}/members/{node_name}:{port}", action_result, method="delete")
+        pool_path = self._quote_path_component(pool_name)
+        node_path = self._quote_path_component(node_name)
+        port_path = self._quote_path_component(port)
+        ret_val, response = self._make_rest_call(
+            f"/mgmt/tm/ltm/pool/{pool_path}/members/{node_path}:{port_path}", action_result, method="delete"
+        )
 
         if phantom.is_fail(ret_val):
             return action_result.get_status()
@@ -301,7 +312,8 @@ class F5BigipLtmConnector(BaseConnector):
         json_str = f'{{"name": "/{partition_name}/{node_name}:{port}"}}'
 
         # make rest call
-        ret_val, response = self._make_rest_call(f"/mgmt/tm/ltm/pool/{pool_name}/members", action_result, method="post", data=json_str)
+        pool_path = self._quote_path_component(pool_name)
+        ret_val, response = self._make_rest_call(f"/mgmt/tm/ltm/pool/{pool_path}/members", action_result, method="post", data=json_str)
 
         if phantom.is_fail(ret_val):
             return action_result.get_status()
@@ -392,7 +404,8 @@ class F5BigipLtmConnector(BaseConnector):
 
         node_name = self._handle_py_ver_compat_for_input_str(self._python_version, param["node_name"])
         # make rest call
-        ret_val, response = self._make_rest_call(f"/mgmt/tm/ltm/node/{node_name}", action_result, method="delete")
+        node_path = self._quote_path_component(node_name)
+        ret_val, response = self._make_rest_call(f"/mgmt/tm/ltm/node/{node_path}", action_result, method="delete")
 
         if phantom.is_fail(ret_val):
             return action_result.get_status()
@@ -411,10 +424,11 @@ class F5BigipLtmConnector(BaseConnector):
 
         node_name = self._handle_py_ver_compat_for_input_str(self._python_version, param["node_name"])
         param["session"] = "user-disabled"
+        node_path = self._quote_path_component(node_name)
 
         # make rest call
         ret_val, response = self._make_rest_call(
-            f"/mgmt/tm/ltm/node/{node_name}", action_result, method="patch", json={"session": "user-disabled"}
+            f"/mgmt/tm/ltm/node/{node_path}", action_result, method="patch", json={"session": "user-disabled"}
         )
 
         if phantom.is_fail(ret_val):
@@ -435,10 +449,11 @@ class F5BigipLtmConnector(BaseConnector):
 
         node_name = self._handle_py_ver_compat_for_input_str(self._python_version, param["node_name"])
         param["session"] = "user-enabled"
+        node_path = self._quote_path_component(node_name)
 
         # make rest call
         ret_val, response = self._make_rest_call(
-            f"/mgmt/tm/ltm/node/{node_name}", action_result, method="patch", json={"session": "user-enabled"}
+            f"/mgmt/tm/ltm/node/{node_path}", action_result, method="patch", json={"session": "user-enabled"}
         )
 
         if phantom.is_fail(ret_val):
@@ -460,7 +475,8 @@ class F5BigipLtmConnector(BaseConnector):
         node_name = self._handle_py_ver_compat_for_input_str(self._python_version, param["node_name"])
 
         # make rest call
-        ret_val, response = self._make_rest_call(f"/mgmt/tm/ltm/node/{node_name}", action_result)
+        node_path = self._quote_path_component(node_name)
+        ret_val, response = self._make_rest_call(f"/mgmt/tm/ltm/node/{node_path}", action_result)
 
         if phantom.is_fail(ret_val):
             return action_result.get_status()
@@ -573,7 +589,8 @@ class F5BigipLtmConnector(BaseConnector):
         pool_name = self._handle_py_ver_compat_for_input_str(self._python_version, param["pool_name"])
 
         # make rest call
-        ret_val, response = self._make_rest_call(f"/mgmt/tm/ltm/pool/{pool_name}", action_result, method="delete")
+        pool_path = self._quote_path_component(pool_name)
+        ret_val, response = self._make_rest_call(f"/mgmt/tm/ltm/pool/{pool_path}", action_result, method="delete")
 
         if phantom.is_fail(ret_val):
             return action_result.get_status()
@@ -600,7 +617,9 @@ class F5BigipLtmConnector(BaseConnector):
         except:
             return action_result.set_status(phantom.APP_ERROR, "Please provide a non-zero positive integer in 'max results' parameter")
 
-        response = self._paginator(f"/mgmt/tm/ltm/pool/~{partition_name}~{pool_name}/members", action_result, limit=max_results)
+        partition_path = self._quote_path_component(partition_name)
+        pool_path = self._quote_path_component(pool_name)
+        response = self._paginator(f"/mgmt/tm/ltm/pool/~{partition_path}~{pool_path}/members", action_result, limit=max_results)
 
         if response is None:
             return action_result.get_status()
@@ -626,7 +645,8 @@ class F5BigipLtmConnector(BaseConnector):
         node_name = self._handle_py_ver_compat_for_input_str(self._python_version, param["node_name"])
 
         # make rest call
-        ret_val, response = self._make_rest_call(f"/mgmt/tm/ltm/node/{node_name}/stats", action_result)
+        node_path = self._quote_path_component(node_name)
+        ret_val, response = self._make_rest_call(f"/mgmt/tm/ltm/node/{node_path}/stats", action_result)
 
         if phantom.is_fail(ret_val):
             return action_result.get_status()
