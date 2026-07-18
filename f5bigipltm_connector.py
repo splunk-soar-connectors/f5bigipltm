@@ -223,7 +223,7 @@ class F5BigipLtmConnector(BaseConnector):
             )
 
         try:
-            r = request_func(url, auth=self._auth, verify=config.get("verify_server_cert", False), data=data, **kwargs)
+            r = request_func(url, auth=self._auth, verify=config.get("verify_server_cert", True), data=data, **kwargs)
         except Exception as e:
             error_code, error_message = self._get_error_message_from_exception(e)
             return RetVal(
