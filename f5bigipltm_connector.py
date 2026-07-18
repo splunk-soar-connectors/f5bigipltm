@@ -346,6 +346,8 @@ class F5BigipLtmConnector(BaseConnector):
     def _paginator(self, endpoint, action_result, payload=None, limit=None):
         items_list = list()
         f5_default_limit = 100
+        max_pages = min(100, max(1, (int(limit) + f5_default_limit - 1) // f5_default_limit)) if limit else 100
+        page_count = 0
 
         if not payload:
             payload = dict()
@@ -360,12 +362,17 @@ class F5BigipLtmConnector(BaseConnector):
                 return None
 
             items_list.extend(items.get("items"))
+            page_count += 1
 
             if limit and len(items_list) >= limit:
                 return items_list[:limit]
 
             if len(items.get("items")) < f5_default_limit:
                 break
+
+            if page_count >= max_pages:
+                action_result.set_status(phantom.APP_ERROR, f"Pagination exceeded the safety limit of {max_pages} pages")
+                return None
 
             payload["$skip"] = payload["$skip"] + f5_default_limit
 
