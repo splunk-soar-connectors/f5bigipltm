@@ -425,17 +425,26 @@ class F5BigipLtmConnector(BaseConnector):
         node_name = self._handle_py_ver_compat_for_input_str(self._python_version, param["node_name"])
         param["session"] = "user-disabled"
         node_path = self._quote_path_component(node_name)
+        endpoint = f"/mgmt/tm/ltm/node/{node_path}"
+        disabled_state = {"session": "user-disabled", "state": "user-down"}
 
         # make rest call
-        ret_val, response = self._make_rest_call(
-            f"/mgmt/tm/ltm/node/{node_path}", action_result, method="patch", json={"session": "user-disabled"}
-        )
+        ret_val, response = self._make_rest_call(endpoint, action_result, method="patch", json=disabled_state)
 
         if phantom.is_fail(ret_val):
             return action_result.get_status()
 
+        ret_val, verified_response = self._make_rest_call(endpoint, action_result)
+
+        if phantom.is_fail(ret_val):
+            return action_result.get_status()
+
+        if any(verified_response.get(key) != value for key, value in disabled_state.items()):
+            return action_result.set_status(phantom.APP_ERROR, "F5 did not place the node in Forced Offline state")
+
         # Add the response into the data section
         action_result.add_data(response)
+        action_result.add_data(verified_response)
 
         summary = action_result.update_summary({})
         summary["node_name"] = node_name
@@ -450,17 +459,26 @@ class F5BigipLtmConnector(BaseConnector):
         node_name = self._handle_py_ver_compat_for_input_str(self._python_version, param["node_name"])
         param["session"] = "user-enabled"
         node_path = self._quote_path_component(node_name)
+        endpoint = f"/mgmt/tm/ltm/node/{node_path}"
+        enabled_state = {"session": "user-enabled", "state": "user-up"}
 
         # make rest call
-        ret_val, response = self._make_rest_call(
-            f"/mgmt/tm/ltm/node/{node_path}", action_result, method="patch", json={"session": "user-enabled"}
-        )
+        ret_val, response = self._make_rest_call(endpoint, action_result, method="patch", json=enabled_state)
 
         if phantom.is_fail(ret_val):
             return action_result.get_status()
 
+        ret_val, verified_response = self._make_rest_call(endpoint, action_result)
+
+        if phantom.is_fail(ret_val):
+            return action_result.get_status()
+
+        if any(verified_response.get(key) != value for key, value in enabled_state.items()):
+            return action_result.set_status(phantom.APP_ERROR, "F5 did not return the node to the Enabled state")
+
         # Add the response into the data section
         action_result.add_data(response)
+        action_result.add_data(verified_response)
 
         summary = action_result.update_summary({})
         summary["node_name"] = node_name
