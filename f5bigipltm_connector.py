@@ -1,6 +1,6 @@
 # File: f5bigipltm_connector.py
 #
-# Copyright (c) 2019-2025 Splunk Inc.
+# Copyright (c) 2019-2026 Splunk Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@
 import ipaddress
 import json
 import sys
+from urllib.parse import quote
 
 import phantom.app as phantom
 import requests
@@ -38,6 +39,11 @@ class F5BigipLtmConnector(BaseConnector):
         self._auth = None
         self._state = None
         self._base_url = None
+
+    @staticmethod
+    def _quote_path_component(value):
+        """Percent-encode a user-controlled F5 REST path component."""
+        return quote(str(value), safe="").replace("~", "%7E")
 
     def _process_empty_response(self, response, action_result):
         # The JSON Content-Type data can also come here if r.text is empty, hence,
@@ -217,7 +223,7 @@ class F5BigipLtmConnector(BaseConnector):
             )
 
         try:
-            r = request_func(url, auth=self._auth, verify=config.get("verify_server_cert", False), data=data, **kwargs)
+            r = request_func(url, auth=self._auth, verify=config.get("verify_server_cert", True), data=data, **kwargs)
         except Exception as e:
             error_code, error_message = self._get_error_message_from_exception(e)
             return RetVal(
@@ -265,7 +271,12 @@ class F5BigipLtmConnector(BaseConnector):
             return action_result.set_status(phantom.APP_ERROR, "Please enter the port in range of 0 to 65535")
 
         # make rest call
-        ret_val, response = self._make_rest_call(f"/mgmt/tm/ltm/pool/{pool_name}/members/{node_name}:{port}", action_result, method="delete")
+        pool_path = self._quote_path_component(pool_name)
+        node_path = self._quote_path_component(node_name)
+        port_path = self._quote_path_component(port)
+        ret_val, response = self._make_rest_call(
+            f"/mgmt/tm/ltm/pool/{pool_path}/members/{node_path}:{port_path}", action_result, method="delete"
+        )
 
         if phantom.is_fail(ret_val):
             return action_result.get_status()
@@ -301,7 +312,8 @@ class F5BigipLtmConnector(BaseConnector):
         json_str = f'{{"name": "/{partition_name}/{node_name}:{port}"}}'
 
         # make rest call
-        ret_val, response = self._make_rest_call(f"/mgmt/tm/ltm/pool/{pool_name}/members", action_result, method="post", data=json_str)
+        pool_path = self._quote_path_component(pool_name)
+        ret_val, response = self._make_rest_call(f"/mgmt/tm/ltm/pool/{pool_path}/members", action_result, method="post", data=json_str)
 
         if phantom.is_fail(ret_val):
             return action_result.get_status()
@@ -334,6 +346,8 @@ class F5BigipLtmConnector(BaseConnector):
     def _paginator(self, endpoint, action_result, payload=None, limit=None):
         items_list = list()
         f5_default_limit = 100
+        max_pages = min(100, max(1, (int(limit) + f5_default_limit - 1) // f5_default_limit)) if limit else 100
+        page_count = 0
 
         if not payload:
             payload = dict()
@@ -348,12 +362,17 @@ class F5BigipLtmConnector(BaseConnector):
                 return None
 
             items_list.extend(items.get("items"))
+            page_count += 1
 
             if limit and len(items_list) >= limit:
                 return items_list[:limit]
 
             if len(items.get("items")) < f5_default_limit:
                 break
+
+            if page_count >= max_pages:
+                action_result.set_status(phantom.APP_ERROR, f"Pagination exceeded the safety limit of {max_pages} pages")
+                return None
 
             payload["$skip"] = payload["$skip"] + f5_default_limit
 
@@ -392,7 +411,8 @@ class F5BigipLtmConnector(BaseConnector):
 
         node_name = self._handle_py_ver_compat_for_input_str(self._python_version, param["node_name"])
         # make rest call
-        ret_val, response = self._make_rest_call(f"/mgmt/tm/ltm/node/{node_name}", action_result, method="delete")
+        node_path = self._quote_path_component(node_name)
+        ret_val, response = self._make_rest_call(f"/mgmt/tm/ltm/node/{node_path}", action_result, method="delete")
 
         if phantom.is_fail(ret_val):
             return action_result.get_status()
@@ -411,17 +431,27 @@ class F5BigipLtmConnector(BaseConnector):
 
         node_name = self._handle_py_ver_compat_for_input_str(self._python_version, param["node_name"])
         param["session"] = "user-disabled"
+        node_path = self._quote_path_component(node_name)
+        endpoint = f"/mgmt/tm/ltm/node/{node_path}"
+        disabled_state = {"session": "user-disabled", "state": "user-down"}
 
         # make rest call
-        ret_val, response = self._make_rest_call(
-            f"/mgmt/tm/ltm/node/{node_name}", action_result, method="patch", json={"session": "user-disabled"}
-        )
+        ret_val, response = self._make_rest_call(endpoint, action_result, method="patch", json=disabled_state)
 
         if phantom.is_fail(ret_val):
             return action_result.get_status()
 
+        ret_val, verified_response = self._make_rest_call(endpoint, action_result)
+
+        if phantom.is_fail(ret_val):
+            return action_result.get_status()
+
+        if any(verified_response.get(key) != value for key, value in disabled_state.items()):
+            return action_result.set_status(phantom.APP_ERROR, "F5 did not place the node in Forced Offline state")
+
         # Add the response into the data section
         action_result.add_data(response)
+        action_result.add_data(verified_response)
 
         summary = action_result.update_summary({})
         summary["node_name"] = node_name
@@ -435,17 +465,27 @@ class F5BigipLtmConnector(BaseConnector):
 
         node_name = self._handle_py_ver_compat_for_input_str(self._python_version, param["node_name"])
         param["session"] = "user-enabled"
+        node_path = self._quote_path_component(node_name)
+        endpoint = f"/mgmt/tm/ltm/node/{node_path}"
+        enabled_state = {"session": "user-enabled", "state": "user-up"}
 
         # make rest call
-        ret_val, response = self._make_rest_call(
-            f"/mgmt/tm/ltm/node/{node_name}", action_result, method="patch", json={"session": "user-enabled"}
-        )
+        ret_val, response = self._make_rest_call(endpoint, action_result, method="patch", json=enabled_state)
 
         if phantom.is_fail(ret_val):
             return action_result.get_status()
 
+        ret_val, verified_response = self._make_rest_call(endpoint, action_result)
+
+        if phantom.is_fail(ret_val):
+            return action_result.get_status()
+
+        if any(verified_response.get(key) != value for key, value in enabled_state.items()):
+            return action_result.set_status(phantom.APP_ERROR, "F5 did not return the node to the Enabled state")
+
         # Add the response into the data section
         action_result.add_data(response)
+        action_result.add_data(verified_response)
 
         summary = action_result.update_summary({})
         summary["node_name"] = node_name
@@ -460,7 +500,8 @@ class F5BigipLtmConnector(BaseConnector):
         node_name = self._handle_py_ver_compat_for_input_str(self._python_version, param["node_name"])
 
         # make rest call
-        ret_val, response = self._make_rest_call(f"/mgmt/tm/ltm/node/{node_name}", action_result)
+        node_path = self._quote_path_component(node_name)
+        ret_val, response = self._make_rest_call(f"/mgmt/tm/ltm/node/{node_path}", action_result)
 
         if phantom.is_fail(ret_val):
             return action_result.get_status()
@@ -573,7 +614,8 @@ class F5BigipLtmConnector(BaseConnector):
         pool_name = self._handle_py_ver_compat_for_input_str(self._python_version, param["pool_name"])
 
         # make rest call
-        ret_val, response = self._make_rest_call(f"/mgmt/tm/ltm/pool/{pool_name}", action_result, method="delete")
+        pool_path = self._quote_path_component(pool_name)
+        ret_val, response = self._make_rest_call(f"/mgmt/tm/ltm/pool/{pool_path}", action_result, method="delete")
 
         if phantom.is_fail(ret_val):
             return action_result.get_status()
@@ -600,7 +642,9 @@ class F5BigipLtmConnector(BaseConnector):
         except:
             return action_result.set_status(phantom.APP_ERROR, "Please provide a non-zero positive integer in 'max results' parameter")
 
-        response = self._paginator(f"/mgmt/tm/ltm/pool/~{partition_name}~{pool_name}/members", action_result, limit=max_results)
+        partition_path = self._quote_path_component(partition_name)
+        pool_path = self._quote_path_component(pool_name)
+        response = self._paginator(f"/mgmt/tm/ltm/pool/~{partition_path}~{pool_path}/members", action_result, limit=max_results)
 
         if response is None:
             return action_result.get_status()
@@ -626,7 +670,8 @@ class F5BigipLtmConnector(BaseConnector):
         node_name = self._handle_py_ver_compat_for_input_str(self._python_version, param["node_name"])
 
         # make rest call
-        ret_val, response = self._make_rest_call(f"/mgmt/tm/ltm/node/{node_name}/stats", action_result)
+        node_path = self._quote_path_component(node_name)
+        ret_val, response = self._make_rest_call(f"/mgmt/tm/ltm/node/{node_path}/stats", action_result)
 
         if phantom.is_fail(ret_val):
             return action_result.get_status()
