@@ -11,25 +11,26 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-import pytest
-
 from f5bigipltm_path import quote_path_component
 
 
-@pytest.mark.parametrize("value", ["", ".", ".."])
-def test_quote_path_component_rejects_empty_and_dot_segments(value):
-    with pytest.raises(ValueError, match="cannot be empty or dot segments"):
-        quote_path_component(value)
+def test_quote_path_component_rejects_empty_and_dot_segments():
+    for value in ("", ".", ".."):
+        try:
+            quote_path_component(value)
+        except ValueError as error:
+            assert "cannot be empty or dot segments" in str(error)
+        else:
+            raise AssertionError(f"Expected {value!r} to be rejected")
 
 
-@pytest.mark.parametrize(
-    ("value", "expected"),
-    [
+def test_quote_path_component_encodes_structural_characters():
+    cases = (
         ("../../auth/user", "..%2F..%2Fauth%2Fuser"),
         ("%2e%2e%2fauth", "%252e%252e%252fauth"),
+        ("%252e%252e%252fauth", "%25252e%25252e%25252fauth"),
         ("node?x=1#fragment", "node%3Fx%3D1%23fragment"),
         ("~Common~node", "%7ECommon%7Enode"),
-    ],
-)
-def test_quote_path_component_encodes_structural_characters(value, expected):
-    assert quote_path_component(value) == expected
+    )
+    for value, expected in cases:
+        assert quote_path_component(value) == expected
