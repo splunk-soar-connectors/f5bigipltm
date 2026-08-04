@@ -1,7 +1,7 @@
 # F5 BIG-IP LTM
 
 Publisher: Splunk <br>
-Connector Version: 2.1.4 <br>
+Connector Version: 2.1.5 <br>
 Product Vendor: F5 <br>
 Product Name: Local Traffic Manager <br>
 Minimum Product Version: 6.1.1
